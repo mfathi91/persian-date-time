@@ -1,0 +1,29 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# License and settings of program
+active.tfc
+settings.tfc
