@@ -2,6 +2,7 @@ package com.mahmoud;
 
 import org.junit.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static org.junit.Assert.*;
@@ -25,6 +26,31 @@ public class PersianDateTest {
         assertEquals(2, pdt.getMonthValue());
         assertEquals(PersianDate.Month.ORDIBEHESHT, pdt.getMonth());
         assertEquals(17, pdt.getDayOfMonth());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnGetDayOfYear(){
+        PersianDate pd = PersianDate.of(1400, 8, 15);
+        assertEquals(231, pd.getDayOfYear());
+    }
+
+    @Test
+    public void testOnGetDayOfYearInLeapYear(){
+        PersianDate pd = PersianDate.of(1387, 12, 30);
+        assertEquals(366, pd.getDayOfYear());
+    }
+
+    @Test
+    public void testOnGetDayOfWeek(){
+        PersianDate saturday = PersianDate.of(1395, 11, 23);
+        assertEquals(DayOfWeek.SATURDAY, saturday.getDayOfWeek());
+        PersianDate sunday = PersianDate.of(1395, 11, 24);
+        assertEquals(DayOfWeek.SUNDAY, sunday.getDayOfWeek());
+        PersianDate monday = PersianDate.of(1395, 11, 25);
+        assertEquals(DayOfWeek.MONDAY, monday.getDayOfWeek());
+        PersianDate friday = PersianDate.of(1395, 11, 29);
+        assertEquals(DayOfWeek.FRIDAY, friday.getDayOfWeek());
     }
 
     //-----------------------------------------------------------------------

@@ -4,7 +4,10 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import net.jcip.annotations.Immutable;
 
-import java.time.*;
+import java.time.DateTimeException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 
@@ -17,7 +20,7 @@ import java.util.Objects;
  *
  * <p>
  * This class is immutable and can be used in multi-threaded programs.
- * 
+ *
  * @author Mahmoud Fathi
  */
 @Immutable
@@ -62,6 +65,25 @@ public final class PersianDate implements Comparable<PersianDate> {
      */
     public int getDayOfMonth() {
         return persianDate.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * @return day-of-year, from 1 to 365 or from 1 to 366 in a leap year
+     */
+    public int getDayOfYear(){
+        return persianDate.get(Calendar.DAY_OF_YEAR);
+    }
+
+    /**
+     * Returns day-of-week as an enum {@link DayOfWeek}. This avoids confusion as to what
+     * {@code int} means. If you need access to the primitive {@code int} value then the
+     * enum provides the {@link DayOfWeek#getValue() int value}.
+     *
+     * @return day-of-week, which is an enum {@link DayOfWeek}
+     */
+    public DayOfWeek getDayOfWeek(){
+        int dayOfWeek = persianDate.get(Calendar.DAY_OF_WEEK);
+        return (dayOfWeek != 1) ? DayOfWeek.of(dayOfWeek - 1) : DayOfWeek.SUNDAY;
     }
 
     /**
