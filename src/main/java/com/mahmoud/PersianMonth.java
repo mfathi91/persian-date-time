@@ -117,9 +117,7 @@ public enum PersianMonth {
      * @return instance of {@code Month} enum.
      */
     static PersianMonth of(int month) {
-        if (month < 1 || month > 12) {
-            throw new IllegalArgumentException("invalid month number:' " + month + "'");
-        }
+        MyUtils.integerRequiresRange(month, 1, 12, "month");
         return PersianMonth.values()[month - 1];
     }
 

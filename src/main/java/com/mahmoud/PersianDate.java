@@ -7,7 +7,6 @@ import net.jcip.annotations.Immutable;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 
@@ -36,6 +35,11 @@ public final class PersianDate implements Comparable<PersianDate> {
      * implementation of this class, it is cached.
      */
     private final LocalDate gregDate;
+
+    /**
+     * Maximim tested year.
+     */
+    private static int MAX_PERSIAN_YEAR = 1500;
 
     /**
      * @return the year
@@ -134,18 +138,13 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
     private PersianDate(int year, PersianMonth month, int dayOfMonth) {
-        if (!isBetween(year, 0, Year.MAX_VALUE)) {
-            throw new DateTimeException("year is out of range: '" + year + "'");
-        }
-
+        MyUtils.integerRequiresRange(year, 1, MAX_PERSIAN_YEAR, "year");
         Objects.requireNonNull(month, "month must not be null");
-        if (!isBetween(month.getValue(), 1, 12)) {
-            throw new DateTimeException("month is out of range: '" + month + "'");
-        }
+        MyUtils.integerRequiresRange(dayOfMonth, 1, 31, "dayOfMonth");
 
         if (dayOfMonth > 29) {
             int maxValidDays = month.length(isLeapYear(year));
-            if (!isBetween(dayOfMonth, 1, maxValidDays)) {
+            if (!MyUtils.isBetween(dayOfMonth, 1, maxValidDays)) {
                 if (!isLeapYear(year) && month == PersianMonth.ESFAND && dayOfMonth == 30) {
                     throw new DateTimeException("Invalid date 'ESFAND 30' as '" + year + "' is not a leap year");
                 } else {
@@ -167,20 +166,6 @@ public final class PersianDate implements Comparable<PersianDate> {
         int gregMonth = gregorianDate.get(Calendar.MONTH) + 1;
         int gregDayOfMonth = gregorianDate.get(Calendar.DAY_OF_MONTH);
         this.gregDate = LocalDate.of(gregYear, gregMonth, gregDayOfMonth);
-    }
-
-    /**
-     * Returns true if and only if {@code val} is greater than or equal to {@code lowerLimit}
-     * and is less than or equal to {@code upperLimit}.
-     *
-     * @param val        the value to be checked
-     * @param lowerLimit lower boundary to be checked
-     * @param upperLimit upper boundary to be checked
-     * @return true if and only if {@code val} is between {@code lowerLimit} and
-     * {@code upperLimit}
-     */
-    private static boolean isBetween(int val, int lowerLimit, int upperLimit) {
-        return val >= lowerLimit && val <= upperLimit;
     }
 
     /**
@@ -232,9 +217,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @throws IllegalArgumentException if argument is a negative value
      */
     public static boolean isLeapYear(int year) {
-        if (year < 0) {
-            throw new IllegalArgumentException("year: '" + year + "' must be a positive integer");
-        }
+        MyUtils.integerRequiresRange(year, 1, MAX_PERSIAN_YEAR, "year");
         return (((25 * year) + 11) % 33) < 8;
     }
 
