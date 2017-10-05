@@ -15,16 +15,16 @@ public class PersianDateTest {
         PersianDate pdt = PersianDate.of(1400, 2, 17);
         assertEquals(1400, pdt.getYear());
         assertEquals(2, pdt.getMonthValue());
-        assertEquals(PersianDate.Month.ORDIBEHESHT, pdt.getMonth());
+        assertEquals(PersianMonth.ORDIBEHESHT, pdt.getMonth());
         assertEquals(17, pdt.getDayOfMonth());
     }
 
     @Test
     public void testOnStaticFactoryMethod2() {
-        PersianDate pdt = PersianDate.of(1400, PersianDate.Month.ORDIBEHESHT, 17);
+        PersianDate pdt = PersianDate.of(1400, PersianMonth.ORDIBEHESHT, 17);
         assertEquals(1400, pdt.getYear());
         assertEquals(2, pdt.getMonthValue());
-        assertEquals(PersianDate.Month.ORDIBEHESHT, pdt.getMonth());
+        assertEquals(PersianMonth.ORDIBEHESHT, pdt.getMonth());
         assertEquals(17, pdt.getDayOfMonth());
     }
 

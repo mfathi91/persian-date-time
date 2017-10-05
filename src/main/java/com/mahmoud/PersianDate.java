@@ -48,8 +48,8 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @return the month-of-year field using the {@code Month} enum.
      * @see #getMonthValue()
      */
-    public Month getMonth() {
-        return Month.of(persianDate.get(Calendar.MONTH) + 1);
+    public PersianMonth getMonth() {
+        return PersianMonth.of(persianDate.get(Calendar.MONTH) + 1);
     }
 
     /**
@@ -87,71 +87,6 @@ public final class PersianDate implements Comparable<PersianDate> {
     }
 
     /**
-     * Persian months.
-     */
-    public enum Month {
-        FARVARDIN(1, 31, "فروردین"),
-        ORDIBEHESHT(2, 31, "اردیبهشت"),
-        KHORDAD(3, 31, "خرداد"),
-        TIR(4, 31, "تیر"),
-        MORDAD(5, 31, "مرداد"),
-        SHAHRIVAR(6, 31, "شهریور"),
-        MEHR(7, 30, "مهر"),
-        ABAN(8, 30, "آبان"),
-        AZAR(9, 30, "آذر"),
-        DEY(10, 30, "دی"),
-        BAHMAN(11, 30, "بهمن"),
-        ESFAND(12, 29, "اسفند");
-
-        private final int number;
-        private final int nDays;
-        private final String persianName;
-
-        private Month(int number, int nDays, String persianName) {
-            this.number = number;
-            this.nDays = nDays;
-            this.persianName = persianName;
-        }
-
-        /**
-         * @return number of month, from 1 to 12
-         */
-        int number() {
-            return number;
-        }
-
-        /**
-         * @return maximum days of each month, in a non-leap year
-         */
-        int days() {
-            return nDays;
-        }
-
-        /**
-         * @return persian name of month.
-         */
-        String getPersianName() {
-            return persianName;
-        }
-
-        /**
-         * Returns the equivalent instance of {@code Month}, based on the passed argument.
-         * Argument should be from 1 to 12.
-         *
-         * @param month the number of month
-         * @return instance of {@code Month} enum.
-         */
-        static Month of(int month) {
-            for (Month pm : values()) {
-                if (pm.number == month) {
-                    return pm;
-                }
-            }
-            throw new IllegalArgumentException("invalid month number:' " + month + "'");
-        }
-    }
-
-    /**
      * Obtains current Persian date from the system clock in the default time zone.
      *
      * @return current Persian date from the system clock in the default time zone
@@ -163,8 +98,8 @@ public final class PersianDate implements Comparable<PersianDate> {
     /**
      * Obtains an instance of {@code PersianDate} with year, month, day of month, hour,
      * minute and second. The value of month must be between {@code 1} and {@code 12}.
-     * Value {@code 1} would be {@link Month#FARVARDIN} and value {@code 12} represents
-     * {@link Month#ESFAND}.
+     * Value {@code 1} would be {@link PersianMonth#FARVARDIN} and value {@code 12} represents
+     * {@link PersianMonth#ESFAND}.
      *
      * @param year       the year to represent, from 1 to MAX_YEAR
      * @param month      the value of month, from 1 to 12
@@ -173,7 +108,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
     public static PersianDate of(int year, int month, int dayOfMonth) {
-        return new PersianDate(year, Month.of(month), dayOfMonth);
+        return new PersianDate(year, PersianMonth.of(month), dayOfMonth);
     }
 
     /**
@@ -181,12 +116,12 @@ public final class PersianDate implements Comparable<PersianDate> {
      * minute and second.
      *
      * @param year       the year to represent, from 1 to MAX_YEAR
-     * @param month      the month-of-year to represent, an instance of {@link Month}
+     * @param month      the month-of-year to represent, an instance of {@link PersianMonth}
      * @param dayOfMonth the dayOfMonth to represent, from 1 to 31
      * @return an instance of {@code PersianDate}
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
-    public static PersianDate of(int year, Month month, int dayOfMonth) {
+    public static PersianDate of(int year, PersianMonth month, int dayOfMonth) {
         return new PersianDate(year, month, dayOfMonth);
     }
 
@@ -194,25 +129,24 @@ public final class PersianDate implements Comparable<PersianDate> {
      * Constructor.
      *
      * @param year       the year to represent, from 1 to MAX_YEAR
-     * @param month      the month-of-year to represent, not null, from {@link Month} enum
+     * @param month      the month-of-year to represent, not null, from {@link PersianMonth} enum
      * @param dayOfMonth the dayOfMonth-of-month to represent, from 1 to 31
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
-    private PersianDate(int year, Month month, int dayOfMonth) {
-
+    private PersianDate(int year, PersianMonth month, int dayOfMonth) {
         if (!isBetween(year, 0, Year.MAX_VALUE)) {
             throw new DateTimeException("year is out of range: '" + year + "'");
         }
 
         Objects.requireNonNull(month, "month must not be null");
-        if (!isBetween(month.number, 1, 12)) {
+        if (!isBetween(month.getValue(), 1, 12)) {
             throw new DateTimeException("month is out of range: '" + month + "'");
         }
 
         if (dayOfMonth > 29) {
-            int maxValidDays = isLeapYear(year) && month == Month.ESFAND ? 30 : month.nDays;
+            int maxValidDays = month.length(isLeapYear(year));
             if (!isBetween(dayOfMonth, 1, maxValidDays)) {
-                if (!isLeapYear(year) && month == Month.ESFAND && dayOfMonth == 30) {
+                if (!isLeapYear(year) && month == PersianMonth.ESFAND && dayOfMonth == 30) {
                     throw new DateTimeException("Invalid date 'ESFAND 30' as '" + year + "' is not a leap year");
                 } else {
                     throw new DateTimeException("Invalid date '" + month.toString() + " " + dayOfMonth + "'");
@@ -223,7 +157,7 @@ public final class PersianDate implements Comparable<PersianDate> {
         // Create Persian date
         persianDate = Calendar.getInstance(new ULocale("fa_IR@calendar=persian"));
         persianDate.clear();
-        persianDate.set(year, month.number - 1, dayOfMonth);
+        persianDate.set(year, month.getValue() - 1, dayOfMonth);
 
         // Convert Persian to Gregorian
         java.util.Calendar gregorianDate = GregorianCalendar.getInstance();
