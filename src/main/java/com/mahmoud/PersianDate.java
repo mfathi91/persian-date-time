@@ -1,21 +1,24 @@
 package com.mahmoud;
 
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
 import net.jcip.annotations.Immutable;
 
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.GregorianCalendar;
+import java.time.temporal.JulianFields;
 import java.util.Objects;
 
 /**
- * A persian date without time class, based on ICU4J library.
+ * This is an implementation of Solar Hijri calendar (also known as Jalali calendar,
+ * Persian calendar).
  *
  * <p>
  * {@code PersianDate} is an immutable date-time object that represents a date,
  * often viewed as year-month-day.
+ *
+ * <p>
+ * In order to simplify usage of this class, it is tried to make API of this class
+ * the same as JDK8 {@link LocalDate} class.
  *
  * <p>
  * This class is immutable and can be used in multi-threaded programs.
@@ -26,26 +29,50 @@ import java.util.Objects;
 public final class PersianDate implements Comparable<PersianDate> {
 
     /**
-     * Persian date.
+     * This is representation of first day of julian system in gregorina calendar.
      */
-    private final Calendar persianDate;
+    private static final LocalDate DAY_ZERO_OF_JULIAN_SYSTEM = LocalDate.of(-4713, 11, 24);
 
     /**
-     * Corresponding gregorian date. Since gregorian date is used frequently in the internal
-     * implementation of this class, it is cached.
+     * The maximum supported persian year.
      */
-    private final LocalDate gregDate;
+    private static final int MIN_YEAR = 1;
 
     /**
-     * Maximim tested year.
+     * The maximum supported persian year.
      */
-    private static int MAX_PERSIAN_YEAR = 1500;
+    private static final int MAX_YEAR = 1999;
+
+    /**
+     * The maximum supported persian date.
+     */
+    public static final PersianDate MIN = PersianDate.of(MIN_YEAR, 1, 1);
+
+    /**
+     * The minimum supported persian date.
+     */
+    public static final PersianDate MAX = PersianDate.of(MAX_YEAR, 12, 29);
+
+    /**
+     * The year.
+     */
+    private final int year;
+
+    /**
+     * The month-of-year.
+     */
+    private final int month;
+
+    /**
+     * The day-of-month.
+     */
+    private final int day;
 
     /**
      * @return the year
      */
     public int getYear() {
-        return persianDate.get(Calendar.YEAR);
+        return year;
     }
 
     /**
@@ -53,7 +80,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @see #getMonthValue()
      */
     public PersianMonth getMonth() {
-        return PersianMonth.of(persianDate.get(Calendar.MONTH) + 1);
+        return PersianMonth.of(month);
     }
 
     /**
@@ -61,21 +88,21 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @see #getMonth()
      */
     public int getMonthValue() {
-        return persianDate.get(Calendar.MONTH) + 1;
+        return month;
     }
 
     /**
      * @return day-of-month, from 1 to 31
      */
     public int getDayOfMonth() {
-        return persianDate.get(Calendar.DAY_OF_MONTH);
+        return day;
     }
 
     /**
-     * @return day-of-year, from 1 to 365 or from 1 to 366 in a leap year
+     * @return day-of-year, from 1 to 365 or 366 in a leap year
      */
     public int getDayOfYear(){
-        return persianDate.get(Calendar.DAY_OF_YEAR);
+        return PersianMonth.of(month).daysToFirstOfMonth() + day;
     }
 
     /**
@@ -86,8 +113,8 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @return day-of-week, which is an enum {@link DayOfWeek}
      */
     public DayOfWeek getDayOfWeek(){
-        int dayOfWeek = persianDate.get(Calendar.DAY_OF_WEEK);
-        return (dayOfWeek != 1) ? DayOfWeek.of(dayOfWeek - 1) : DayOfWeek.SUNDAY;
+        int julianDays = PersianJulianConverter.persianDateToJulianDays(this);
+        return DayOfWeek.of(((julianDays + 1) % 7) + 1);
     }
 
     /**
@@ -96,7 +123,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @return current Persian date from the system clock in the default time zone
      */
     public static PersianDate now() {
-        return gregorianToPersian(LocalDate.now());
+        return PersianDate.gregorianToPersian(LocalDate.now());
     }
 
     /**
@@ -138,9 +165,9 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
     private PersianDate(int year, PersianMonth month, int dayOfMonth) {
-        MyUtils.integerRequiresRange(year, 1, MAX_PERSIAN_YEAR, "year");
+        MyUtils.intRequireRange(year, MIN_YEAR, MAX_YEAR, "year");
         Objects.requireNonNull(month, "month must not be null");
-        MyUtils.integerRequiresRange(dayOfMonth, 1, 31, "dayOfMonth");
+        MyUtils.intRequireRange(dayOfMonth, 1, 31, "dayOfMonth");
 
         if (dayOfMonth > 29) {
             int maxValidDays = month.length(isLeapYear(year));
@@ -153,19 +180,9 @@ public final class PersianDate implements Comparable<PersianDate> {
             }
         }
 
-        // Create Persian date
-        persianDate = Calendar.getInstance(new ULocale("fa_IR@calendar=persian"));
-        persianDate.clear();
-        persianDate.set(year, month.getValue() - 1, dayOfMonth);
-
-        // Convert Persian to Gregorian
-        java.util.Calendar gregorianDate = GregorianCalendar.getInstance();
-        gregorianDate.setTime(persianDate.getTime());
-
-        int gregYear = gregorianDate.get(Calendar.YEAR);
-        int gregMonth = gregorianDate.get(Calendar.MONTH) + 1;
-        int gregDayOfMonth = gregorianDate.get(Calendar.DAY_OF_MONTH);
-        this.gregDate = LocalDate.of(gregYear, gregMonth, gregDayOfMonth);
+        this.year = year;
+        this.month = month.getValue();
+        this.day = dayOfMonth;
     }
 
     /**
@@ -175,30 +192,21 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @return the equivalent Gregorian date as an instance of {@link LocalDate}
      */
     public LocalDate toGregorian() {
-        return gregDate;
+        return DAY_ZERO_OF_JULIAN_SYSTEM.with(JulianFields.JULIAN_DAY,
+                PersianJulianConverter.persianDateToJulianDays(this) + 1);
     }
 
     /**
      * Returns an equivalent Persian date and time as an instance of {@link PersianDate}.
      * Calling this method has no effect on the class and other instances of this class.
      *
-     * @param ldt Gregorian date and time
+     * @param ld Gregorian date and time
      * @return an equivalent Persian date and time as an instance of {@link PersianDate}
      */
-    public static PersianDate gregorianToPersian(LocalDate ldt) {
-        // Create a Gregorian calendar with the argument ldt
-        java.util.Calendar gregorianCalendar = java.util.Calendar.getInstance();
-        gregorianCalendar.set(ldt.getYear(), ldt.getMonthValue() - 1, ldt.getDayOfMonth());
-
-        // Convert Gregorian calendar to Persian calendar
-        ULocale locale = new ULocale("fa_IR@calendar=persian");
-        Calendar persianCalendar = Calendar.getInstance(locale);
-        persianCalendar.setTime(gregorianCalendar.getTime());
-
-        int persianYear = persianCalendar.get(Calendar.YEAR);
-        int persianMonth = persianCalendar.get(Calendar.MONTH) + 1;
-        int persianDayOfMonth = persianCalendar.get(Calendar.DAY_OF_MONTH);
-        return PersianDate.of(persianYear, persianMonth, persianDayOfMonth);
+    public static PersianDate gregorianToPersian(LocalDate ld) {
+        Objects.requireNonNull(ld);
+        return PersianJulianConverter.julianDaysToPersianDate
+                ((int) ld.getLong(JulianFields.JULIAN_DAY) - 1);
     }
 
     /**
@@ -207,7 +215,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @return true if {@code year} is a leap year in Persian calendar
      */
     public boolean isLeapYear() {
-        return PersianDate.isLeapYear(getYear());
+        return PersianDate.isLeapYear(year);
     }
 
     /**
@@ -217,7 +225,7 @@ public final class PersianDate implements Comparable<PersianDate> {
      * @throws IllegalArgumentException if argument is a negative value
      */
     public static boolean isLeapYear(int year) {
-        MyUtils.integerRequiresRange(year, 1, MAX_PERSIAN_YEAR, "year");
+        MyUtils.intRequireRange(year, 1, MAX_YEAR, "year");
         return (((25 * year) + 11) % 33) < 8;
     }
 
@@ -233,7 +241,14 @@ public final class PersianDate implements Comparable<PersianDate> {
     @Override
     public int compareTo(PersianDate other) {
         Objects.requireNonNull(other, "object to compare must not be null");
-        return this.gregDate.compareTo(other.gregDate);
+        int cmp = year - other.year;
+        if(cmp == 0){
+            cmp = month - other.month;
+            if(cmp == 0){
+                cmp = day - other.day;
+            }
+        }
+        return cmp;
     }
 
     /**

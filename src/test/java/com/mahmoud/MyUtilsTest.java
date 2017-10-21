@@ -18,8 +18,8 @@ public class MyUtilsTest {
 
     @Test
     public void testOnIntegerRequiresRange(){
-        assertEquals(5, MyUtils.integerRequiresRange(5, -100, 100, "sth"));
-        assertEquals(-100, MyUtils.integerRequiresRange(-100, -101, -99, "sth"));
+        assertEquals(5, MyUtils.intRequireRange(5, -100, 100, "sth"));
+        assertEquals(-100, MyUtils.intRequireRange(-100, -101, -99, "sth"));
     }
 
 }

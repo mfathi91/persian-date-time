@@ -117,7 +117,7 @@ public enum PersianMonth {
      * @return instance of {@code Month} enum.
      */
     static PersianMonth of(int month) {
-        MyUtils.integerRequiresRange(month, 1, 12, "month");
+        MyUtils.intRequireRange(month, 1, 12, "month");
         return PersianMonth.values()[month - 1];
     }
 
@@ -190,5 +190,15 @@ public enum PersianMonth {
      */
     public PersianMonth minus(long months) {
         return plus(-months);
+    }
+
+    /**
+     * Returns elapsed days from first of the year to first of this month.
+     *
+     * @return elapsed days from first of the year to first of this month.
+     */
+    public int daysToFirstOfMonth(){
+        int val = getValue();
+        return (val <= 6) ? (31 * (val - 1)) : ((30 * (val - 1 - 6)) + 186);
     }
 }

@@ -5,7 +5,7 @@ import net.jcip.annotations.ThreadSafe;
 /**
  * This class provides static helper methods, such as {@cod isBetween(...)}.
  * It is not possible to get an instance of this class.
- * <p>
+ *
  * <p>
  * This class is stateless and thread-safe.
  */
@@ -42,9 +42,25 @@ class MyUtils {
      * @param valName    the name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is in the range
      */
-    static int integerRequiresRange(int val, int lowerLimit, int upperLimit, String valName) {
+    static int intRequireRange(int val, int lowerLimit, int upperLimit, String valName) {
         if (!isBetween(val, lowerLimit, upperLimit)) {
-            throw new IllegalArgumentException(valName + " is out of range [" + lowerLimit + ", " + upperLimit + "]");
+            throw new IllegalArgumentException(valName + " " + val +
+                    " is out of valid range [" + lowerLimit + ", " + upperLimit + "]");
+        }
+        return val;
+    }
+
+    /**
+     * Checks whether an integer is greater than zero or not. If {@code val} is less than
+     * or equal to zero, an IllegalArgumentException will be thrown with a suitable message.
+     *
+     * @param val     integer value to check
+     * @param valName name of {@code val} that is printed in the exception message
+     * @return {@code val}, if it is positive
+     */
+    static int intRequirePositive(int val, String valName) {
+        if (val <= 0) {
+            throw new IllegalArgumentException(valName + " is not positive: " + val);
         }
         return val;
     }

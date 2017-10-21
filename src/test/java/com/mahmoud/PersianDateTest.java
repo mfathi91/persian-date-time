@@ -62,6 +62,18 @@ public class PersianDateTest {
     }
 
     @Test
+    public void testOnToGregorianMinPersianDate(){
+        LocalDate expected = LocalDate.of(622, 3, 22);
+        assertReflectionEquals(expected, PersianDate.MIN.toGregorian());
+    }
+
+    @Test
+    public void testOnToGregorianMaxPersianDate(){
+        LocalDate expected = LocalDate.of(2621, 3, 20);
+        assertReflectionEquals(expected, PersianDate.MAX.toGregorian());
+    }
+
+    @Test
     public void testOnToGregorianInPersianLeapYear() {
         PersianDate pdt = PersianDate.of(1399, 12, 30);
         LocalDate expected = LocalDate.of(2021, 3, 20);

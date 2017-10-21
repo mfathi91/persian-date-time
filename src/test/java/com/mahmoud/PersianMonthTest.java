@@ -66,4 +66,20 @@ public class PersianMonthTest {
         assertEquals(PersianMonth.ESFAND, PersianMonth.TIR.minus(4));
         assertEquals(PersianMonth.MEHR, PersianMonth.MORDAD.minus(-26));
     }
+
+    @Test
+    public void testOnDaysToFirstOfMonth(){
+        assertEquals(0, PersianMonth.FARVARDIN.daysToFirstOfMonth());
+        assertEquals(31, PersianMonth.ORDIBEHESHT.daysToFirstOfMonth());
+        assertEquals(62, PersianMonth.KHORDAD.daysToFirstOfMonth());
+        assertEquals(93, PersianMonth.TIR.daysToFirstOfMonth());
+        assertEquals(124, PersianMonth.MORDAD.daysToFirstOfMonth());
+        assertEquals(155, PersianMonth.SHAHRIVAR.daysToFirstOfMonth());
+        assertEquals(186, PersianMonth.MEHR.daysToFirstOfMonth());
+        assertEquals(216, PersianMonth.ABAN.daysToFirstOfMonth());
+        assertEquals(246, PersianMonth.AZAR.daysToFirstOfMonth());
+        assertEquals(276, PersianMonth.DEY.daysToFirstOfMonth());
+        assertEquals(306, PersianMonth.BAHMAN.daysToFirstOfMonth());
+        assertEquals(336, PersianMonth.ESFAND.daysToFirstOfMonth());
+    }
 }
