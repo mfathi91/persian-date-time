@@ -68,7 +68,7 @@ public class PersianMonthTest {
     }
 
     @Test
-    public void testOnDaysToFirstOfMonth(){
+    public void testOnDaysToFirstOfMonth() {
         assertEquals(0, PersianMonth.FARVARDIN.daysToFirstOfMonth());
         assertEquals(31, PersianMonth.ORDIBEHESHT.daysToFirstOfMonth());
         assertEquals(62, PersianMonth.KHORDAD.daysToFirstOfMonth());

@@ -30,19 +30,19 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnGetDayOfYear(){
+    public void testOnGetDayOfYear() {
         PersianDate pd = PersianDate.of(1400, 8, 15);
         assertEquals(231, pd.getDayOfYear());
     }
 
     @Test
-    public void testOnGetDayOfYearInLeapYear(){
+    public void testOnGetDayOfYearInLeapYear() {
         PersianDate pd = PersianDate.of(1387, 12, 30);
         assertEquals(366, pd.getDayOfYear());
     }
 
     @Test
-    public void testOnGetDayOfWeek(){
+    public void testOnGetDayOfWeek() {
         PersianDate saturday = PersianDate.of(1395, 11, 23);
         assertEquals(DayOfWeek.SATURDAY, saturday.getDayOfWeek());
         PersianDate sunday = PersianDate.of(1395, 11, 24);
@@ -62,13 +62,13 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnToGregorianMinPersianDate(){
+    public void testOnToGregorianMinPersianDate() {
         LocalDate expected = LocalDate.of(622, 3, 22);
         assertReflectionEquals(expected, PersianDate.MIN.toGregorian());
     }
 
     @Test
-    public void testOnToGregorianMaxPersianDate(){
+    public void testOnToGregorianMaxPersianDate() {
         LocalDate expected = LocalDate.of(2621, 3, 20);
         assertReflectionEquals(expected, PersianDate.MAX.toGregorian());
     }
@@ -190,7 +190,7 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnEqualsNull(){
+    public void testOnEqualsNull() {
         PersianDate a = PersianDate.of(1396, 3, 15);
         assertFalse(a.equals(null));
     }
@@ -202,7 +202,7 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnEqualsSymmetricity(){
+    public void testOnEqualsSymmetricity() {
         PersianDate a = PersianDate.of(1396, 3, 15);
         PersianDate b = PersianDate.of(1396, 3, 15);
         assertTrue(a.equals(b));
@@ -210,7 +210,7 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnEqualsTransitivity(){
+    public void testOnEqualsTransitivity() {
         PersianDate a = PersianDate.of(1396, 3, 15);
         PersianDate b = PersianDate.of(1396, 3, 15);
         PersianDate c = PersianDate.of(1396, 3, 15);
@@ -220,7 +220,7 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnHashCodeForEqualObjects(){
+    public void testOnHashCodeForEqualObjects() {
         PersianDate a = PersianDate.of(1500, 12, 15);
         PersianDate b = PersianDate.of(1500, 12, 15);
         assertTrue(a.equals(b));
@@ -229,7 +229,7 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnToString(){
+    public void testOnToString() {
         PersianDate persianDate1 = PersianDate.of(1391, 11, 6);
         assertEquals("1391-11-06", persianDate1.toString());
         PersianDate persianDate2 = PersianDate.of(31, 1, 12);

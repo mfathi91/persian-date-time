@@ -197,7 +197,7 @@ public enum PersianMonth {
      *
      * @return elapsed days from first of the year to first of this month.
      */
-    public int daysToFirstOfMonth(){
+    public int daysToFirstOfMonth() {
         int val = getValue();
         return (val <= 6) ? (31 * (val - 1)) : ((30 * (val - 1 - 6)) + 186);
     }
