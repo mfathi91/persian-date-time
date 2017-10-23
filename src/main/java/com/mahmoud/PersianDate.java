@@ -221,6 +221,7 @@ public final class PersianDate implements Comparable<PersianDate> {
     /**
      * Returns true if {@code year} is a leap year in Persian calendar.
      *
+     * @param year the year to be checked whether is a leap year or not
      * @return true if {@code year} is a leap year in Persian calendar
      * @throws IllegalArgumentException if argument is a negative value
      */
@@ -267,9 +268,9 @@ public final class PersianDate implements Comparable<PersianDate> {
      * <pre>
      *     PersianDate a = PersianDate.of(1396, 3, 15);
      *     PersianDate b = PersianDate.of(1396, 6, 10);
-     *     a.isBefore(b) -> true
-     *     a.isBefore(a) -> false
-     *     b.isBefore(a) -> false
+     *     a.isBefore(b) - true
+     *     a.isBefore(a) - false
+     *     b.isBefore(a) - false
      * </pre>
      * @param other instance of PersianDate to compare to
      * @return true, if persian date is before the specified persian date
@@ -284,9 +285,9 @@ public final class PersianDate implements Comparable<PersianDate> {
      * <pre>
      *     PersianDate a = PersianDate.of(1396, 3, 15);
      *     PersianDate b = PersianDate.of(1396, 6, 10);
-     *     a.isAfter(b) -> false
-     *     a.isAfter(a) -> false
-     *     b.isAfter(a) -> true
+     *     a.isAfter(b) - false
+     *     a.isAfter(a) - false
+     *     b.isAfter(a) - true
      * </pre>
      * @param other instance of PersianDate to compare to
      * @return true, if persian date is after the specified persian date

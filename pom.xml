@@ -2,19 +2,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mahmoud</groupId>
-    <artifactId>persian-calendar</artifactId>
-    <version>1.0</version>
+    <groupId>com.github.mfathi91</groupId>
+    <artifactId>persian-date-time</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>persian-calendar</name>
-    <url>http://maven.apache.org</url>
+    <name>Persian Date Time</name>
+    <description>This library is an implementation of Solar Hijri calendar</description>
+    <url>https://github.com/mfathi91/persian-date-time</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Mahmoud Fathi</name>
+            <email>m.fathi1991@gmail.com</email>
+            <organization>toosfuse.com</organization>
+            <organizationUrl>https://github.com/mfathi91</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:mfathi91/persian-date-time.git</connection>
+        <developerConnection>scm:git:git@github.com:mfathi91/persian-date-time.git</developerConnection>
+        <url>https://github.com/oshi/oshi.git</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jcip-version>1.0</jcip-version>
         <junit-version>4.12</junit-version>
         <unitils-core-version>3.4.6</unitils-core-version>
+        <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+        <maven-javadoc-plugin-version>3.0.0-M1</maven-javadoc-plugin-version>
     </properties>
 
     <dependencies>
@@ -44,6 +69,7 @@
 
     <build>
         <plugins>
+            <!-- Compiler plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.2</version>
@@ -51,6 +77,36 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+
+            <!-- Source plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Javadoc plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

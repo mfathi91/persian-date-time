@@ -27,7 +27,7 @@ It is possible to easily convert Persian date to corresponding Gregorian date:
 ```java
 // Convert Persian date to Gregorian date
 PersianDate persianDate1 = PersianDate.of(1397, 5, 11);
-LocalDate gregDate1 = persianDate.toGregorian();
+LocalDate gregDate1 = persianDate1.toGregorian();
 
 // Convert Gregorian date to Persian date
 LocalDate gregDate2 = LocalDate.of(2015, 4, 17);
