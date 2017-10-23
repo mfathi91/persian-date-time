@@ -10,7 +10,7 @@ import net.jcip.annotations.ThreadSafe;
  * This class is stateless and thread-safe.
  */
 @ThreadSafe
-class MyUtils {
+public class MyUtils {
 
     // Ensure non-instantiability
     private MyUtils() {
@@ -27,7 +27,7 @@ class MyUtils {
      * @return true if and only if {@code val} is between {@code lowerLimit} and
      * {@code upperLimit}
      */
-    static boolean isBetween(int val, int lowerLimit, int upperLimit) {
+    public static boolean isBetween(int val, int lowerLimit, int upperLimit) {
         return val >= lowerLimit && val <= upperLimit;
     }
 
@@ -42,7 +42,7 @@ class MyUtils {
      * @param valName    the name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is in the range
      */
-    static int intRequireRange(int val, int lowerLimit, int upperLimit, String valName) {
+    public static int intRequireRange(int val, int lowerLimit, int upperLimit, String valName) {
         if (!isBetween(val, lowerLimit, upperLimit)) {
             throw new IllegalArgumentException(valName + " " + val +
                     " is out of valid range [" + lowerLimit + ", " + upperLimit + "]");
@@ -58,7 +58,7 @@ class MyUtils {
      * @param valName name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is positive
      */
-    static int intRequirePositive(int val, String valName) {
+    public static int intRequirePositive(int val, String valName) {
         if (val <= 0) {
             throw new IllegalArgumentException(valName + " is not positive: " + val);
         }
