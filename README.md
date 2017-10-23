@@ -7,7 +7,19 @@ programs.
 
 Since Java does not support Persian calendar, this library can be used in the applications that need Persian calendar system. Purpose of this library is to provide an immutable and easy API (that is similar to JDK 8 date and time API) for Persian calendar system.
 
-## Usage
+## Instructions
+
+### Maven
+Include the following to your dependency list:
+```xml
+<dependency>
+  <groupId>com.github.mfathi91</groupId>
+  <artifactId>persian-date-time</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+### Usage
 One can get an instance of _PersianDate_ for the present date:
 ```java
 PersianDate today = PersianDate.now();
@@ -34,6 +46,10 @@ LocalDate gregDate2 = LocalDate.of(2015, 4, 17);
 PersianDate persianDate2 = PersianDate.gregorianToPersian(gregDate2);
 ```
 The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](http://www.fourmilab.ch/documents/calendar/).
+
+### Requirements
+This version of Persian Date Time requires:
+ * Java SE 8
 
 ## License
 This library is released under MIT license.

@@ -3,7 +3,7 @@ package com.github.mfathi91;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This class provides static helper methods, such as {@cod isBetween(...)}.
+ * This class provides static helper methods, in order to remove boilerplate code.
  * It is not possible to get an instance of this class.
  *
  * <p>
