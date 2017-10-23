@@ -1,4 +1,4 @@
-package com.mahmoud;
+package com.github.mfathi91;
 
 import net.jcip.annotations.ThreadSafe;
 
