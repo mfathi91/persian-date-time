@@ -1,4 +1,4 @@
-package com.github.mfathi91;
+package com.github.mfathi91.time;
 
 import net.jcip.annotations.Immutable;
 
