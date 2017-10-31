@@ -5,7 +5,6 @@ import net.jcip.annotations.ThreadSafe;
 /**
  * This class provides static helper methods, in order to remove boilerplate code.
  * It is not possible to get an instance of this class.
- *
  * <p>
  * This class is stateless and thread-safe.
  */
@@ -28,6 +27,20 @@ public class MyUtils {
      * {@code upperLimit}
      */
     public static boolean isBetween(int val, int lowerLimit, int upperLimit) {
+        return val >= lowerLimit && val <= upperLimit;
+    }
+
+    /**
+     * Returns true if and only if {@code val} is greater than or equal to {@code lowerLimit}
+     * and is less than or equal to {@code upperLimit}.
+     *
+     * @param val        the value to be checked, a long
+     * @param lowerLimit lower boundary to be checked, a long
+     * @param upperLimit upper boundary to be checked, a long
+     * @return true if and only if {@code val} is between {@code lowerLimit} and
+     * {@code upperLimit}
+     */
+    public static boolean isBetween(long val, long lowerLimit, long upperLimit) {
         return val >= lowerLimit && val <= upperLimit;
     }
 
@@ -62,6 +75,40 @@ public class MyUtils {
         if (val <= 0) {
             throw new IllegalArgumentException(valName + " is not positive: " + val);
         }
+        return val;
+    }
+
+    /**
+     * Checks whether a long is greater than zero or not. If {@code val} is less than
+     * or equal to zero, an IllegalArgumentException will be thrown with a suitable message.
+     *
+     * @param val     long value to check
+     * @param valName name of {@code val} that is printed in the exception message
+     * @return {@code val}, if it is positive
+     */
+    public static long longRequirePositive(long val, String valName) {
+        if (val <= 0) {
+            throw new IllegalArgumentException(valName + " is not positive: " + val);
+        }
+        return val;
+    }
+
+    /**
+     * Checks whether a long is in a range or not. If {@code val} is less than
+     * {@code lowerLimit} or greater than {@code upperLimit}, an IllegalArgumentException
+     * will be thrown with a suitable message.
+     *
+     * @param val        value to check
+     * @param lowerLimit lower limit of range
+     * @param upperLimit upper limit of range
+     * @param valName    the name of {@code val} that is printed in the exception message
+     * @return {@code val}, if it is in the range
+     */
+    public static long longRequireRange(long val, long lowerLimit, long upperLimit, String valName) {
+        if (val < lowerLimit || val > upperLimit){
+                throw new IllegalArgumentException(valName + " " + val +
+                        " is out of valid range [" + lowerLimit + ", " + upperLimit + "]");
+            }
         return val;
     }
 }

@@ -4,7 +4,10 @@ import org.junit.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.chrono.ChronoPeriod;
+import java.time.temporal.ChronoField;
 
+import static java.time.temporal.ChronoUnit.*;
 import static org.junit.Assert.*;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
@@ -12,20 +15,11 @@ public class PersianDateTest {
 
     @Test
     public void testOnStaticFactoryMethod1() {
-        PersianDate pdt = PersianDate.of(1400, 2, 17);
-        assertEquals(1400, pdt.getYear());
-        assertEquals(2, pdt.getMonthValue());
-        assertEquals(PersianMonth.ORDIBEHESHT, pdt.getMonth());
-        assertEquals(17, pdt.getDayOfMonth());
-    }
-
-    @Test
-    public void testOnStaticFactoryMethod2() {
-        PersianDate pdt = PersianDate.of(1400, PersianMonth.ORDIBEHESHT, 17);
-        assertEquals(1400, pdt.getYear());
-        assertEquals(2, pdt.getMonthValue());
-        assertEquals(PersianMonth.ORDIBEHESHT, pdt.getMonth());
-        assertEquals(17, pdt.getDayOfMonth());
+        PersianDate pd = PersianDate.of(1400, 2, 17);
+        assertEquals(1400, pd.getYear());
+        assertEquals(2, pd.getMonthValue());
+        assertEquals(PersianMonth.ORDIBEHESHT, pd.getMonth());
+        assertEquals(17, pd.getDayOfMonth());
     }
 
     //-----------------------------------------------------------------------
@@ -51,6 +45,237 @@ public class PersianDateTest {
         assertEquals(DayOfWeek.MONDAY, monday.getDayOfWeek());
         PersianDate friday = PersianDate.of(1395, 11, 29);
         assertEquals(DayOfWeek.FRIDAY, friday.getDayOfWeek());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnToJulianDay() {
+        assertEquals(2458054, PersianDate.of(1396, 8, 6).toJulianDay());
+        assertEquals(2462580, PersianDate.of(1408, 12, 30).toJulianDay());
+        assertEquals(1984844, PersianDate.of(101, 1, 1).toJulianDay());
+    }
+
+    @Test
+    public void testOnOfJulianDay() {
+        assertReflectionEquals(PersianDate.of(1393, 11, 13), PersianDate.ofJulianDays(2457055));
+        assertReflectionEquals(PersianDate.of(1791, 6, 19), PersianDate.ofJulianDays(2602276));
+        assertReflectionEquals(PersianDate.of(320, 5, 5), PersianDate.ofJulianDays(2064960));
+        assertReflectionEquals(PersianDate.of(321, 12, 29), PersianDate.ofJulianDays(2065561));
+        assertReflectionEquals(PersianDate.of(473, 1, 1), PersianDate.ofJulianDays(2120714));
+        assertReflectionEquals(PersianDate.of(474, 1, 1), PersianDate.ofJulianDays(2121079));
+        assertReflectionEquals(PersianDate.of(474, 12, 30), PersianDate.ofJulianDays(2121444));
+        assertReflectionEquals(PersianDate.of(475, 1, 1), PersianDate.ofJulianDays(2121445));
+        assertReflectionEquals(PersianDate.MIN, PersianDate.ofJulianDays(1948320));
+        assertReflectionEquals(PersianDate.MAX, PersianDate.ofJulianDays(2678438));
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnPlusYears() {
+        PersianDate actual = PersianDate.of(1400, 1, 1).plusYears(1);
+        PersianDate expected = PersianDate.of(1401, 1, 1);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusYearsLeapYear() {
+        PersianDate actual = PersianDate.of(1387, 12, 30).plusYears(1);
+        PersianDate expected = PersianDate.of(1388, 12, 29);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusYearsLeapYear100Years() {
+        PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(100);
+        PersianDate expected = PersianDate.of(1603, 12, 29);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusYearsNegativeLeapYear104Years() {
+        PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(-104);
+        PersianDate expected = PersianDate.of(1399, 12, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnPlusMonths() {
+        PersianDate actual = PersianDate.of(1388, 1, 1).plusMonths(1);
+        PersianDate expected = PersianDate.of(1388, 2, 1);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthsMoreThan12Months() {
+        PersianDate actual = PersianDate.of(1353, 10, 25).plusMonths(16);
+        PersianDate expected = PersianDate.of(1355, 2, 25);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthShahrivarToMehr() {
+        PersianDate actual = PersianDate.of(1400, 6, 31).plusMonths(1);
+        PersianDate expected = PersianDate.of(1400, 7, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthEndOfMonthLeapYear() {
+        PersianDate actual = PersianDate.of(1387, 3, 30).plusMonths(9);
+        PersianDate expected = PersianDate.of(1387, 12, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthEndOfMonthNotLeapYear() {
+        PersianDate actual = PersianDate.of(1396, 4, 30).plusMonths(8);
+        PersianDate expected = PersianDate.of(1396, 12, 29);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthNegative() {
+        PersianDate actual = PersianDate.of(1396, 6, 31).plusMonths(-8);
+        PersianDate expected = PersianDate.of(1395, 10, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthNegativeMoreThan12Months() {
+        PersianDate actual = PersianDate.of(1396, 7, 30).plusMonths(-30);
+        PersianDate expected = PersianDate.of(1394, 1, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthNegativeEndOfYearLeapYear() {
+        PersianDate actual = PersianDate.of(1388, 1, 31).plusMonths(-1);
+        PersianDate expected = PersianDate.of(1387, 12, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusMonthNegativeEndOfYearNotLeapYear() {
+        PersianDate actual = PersianDate.of(1389, 1, 31).plusMonths(-1);
+        PersianDate expected = PersianDate.of(1388, 12, 29);
+        assertReflectionEquals(expected, actual);
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnPlusDays() {
+        PersianDate actual = PersianDate.of(1450, 6, 31).plusDays(1);
+        PersianDate expected = PersianDate.of(1450, 7, 1);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysMoreThan365Days() {
+        PersianDate actual = PersianDate.of(1396, 8, 6).plusDays(24435);
+        PersianDate expected = PersianDate.of(1463, 6, 31);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysEndOfYearLeapYear() {
+        PersianDate actual = PersianDate.of(1387, 12, 29).plusDays(1);
+        PersianDate expected = PersianDate.of(1387, 12, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysEndOfNotYearLeapYear() {
+        PersianDate actual = PersianDate.of(1388, 12, 29).plusDays(1);
+        PersianDate expected = PersianDate.of(1389, 1, 1);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysNegativeFirstOfYearLeapYear() {
+        PersianDate actual = PersianDate.of(1392, 1, 1).plusDays(-1);
+        PersianDate expected = PersianDate.of(1391, 12, 30);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysNegativeFirstOfYearNotLeapYear() {
+        PersianDate actual = PersianDate.of(1393, 1, 1).plusDays(-1);
+        PersianDate expected = PersianDate.of(1392, 12, 29);
+        assertReflectionEquals(expected, actual);
+    }
+
+    @Test
+    public void testOnPlusDaysNegativeMoreThan365Days() {
+        PersianDate actual = PersianDate.of(1396, 8, 6).plusDays(-35688);
+        PersianDate expected = PersianDate.of(1298, 11, 22);
+        assertReflectionEquals(expected, actual);
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnToEpochDay() {
+        assertEquals(17468, PersianDate.of(1396, 8, 7).toEpochDay());
+        assertEquals(-66869, PersianDate.of(1165, 9, 11).toEpochDay());
+        assertEquals(-492267, PersianDate.of(1, 1, 1).toEpochDay());
+        assertEquals(237851, PersianDate.of(1999, 12, 29).toEpochDay());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnGetLengthOfMonth(){
+        // 1387 is a leap year
+        assertEquals(31, PersianDate.of(1387, 1, 1).lengthOfMonth());
+        assertEquals(30, PersianDate.of(1387, 12, 1).lengthOfMonth());
+
+        // 1388 is a normal year
+        assertEquals(31, PersianDate.of(1388, 1, 1).lengthOfMonth());
+        assertEquals(29, PersianDate.of(1388, 12, 1).lengthOfMonth());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnGetLongDayOfWeek() {
+        PersianDate pd = PersianDate.of(1387, 12, 30);
+        DayOfWeek dow = DayOfWeek.FRIDAY;
+        // Check about three years
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(dow.getValue(), pd.getLong(ChronoField.DAY_OF_WEEK));
+            pd = pd.plusDays(1);
+            dow = dow.plus(1);
+        }
+    }
+
+    @Test
+    public void testOnGetLongAlignedDayOfWeekInMonth() {
+        PersianDate pd = PersianDate.of(1396, 8, 8);
+        assertEquals(1, pd.getLong(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH));
+        pd = PersianDate.of(1292, 12, 30);
+        assertEquals(2, pd.getLong(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH));
+    }
+
+    @Test
+    public void testOnGetLongAlignedWeekOfMonth() {
+        PersianDate pd = PersianDate.of(1345, 7, 16);
+        assertEquals(3, pd.getLong(ChronoField.ALIGNED_WEEK_OF_MONTH));
+        pd = PersianDate.of(1500, 11, 1);
+        assertEquals(1, pd.getLong(ChronoField.ALIGNED_WEEK_OF_MONTH));
+    }
+
+    @Test
+    public void testOnGetLongALignedWeekOfYear() {
+        PersianDate pd = PersianDate.of(1612, 2, 31);
+        assertEquals(9, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
+        pd = PersianDate.of(1999, 11, 30);
+        assertEquals(48, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
+    }
+
+    @Test
+    public void testOnProlepticMonth() {
+        PersianDate pd = PersianDate.of(1612, 2, 31);
+        assertEquals(19345, pd.getLong(ChronoField.PROLEPTIC_MONTH));
+        pd = PersianDate.of(1999, 11, 30);
+        assertEquals(23998, pd.getLong(ChronoField.PROLEPTIC_MONTH));
     }
 
     //-----------------------------------------------------------------------
@@ -120,42 +345,42 @@ public class PersianDateTest {
     public void testOnToPersian() {
         LocalDate ld = LocalDate.of(2046, 5, 10);
         PersianDate expected = PersianDate.of(1425, 2, 20);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ld));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ld));
     }
 
     @Test
     public void testOnToPersianInGregorianLeapYear() {
         LocalDate ldt = LocalDate.of(2012, 2, 29);
         PersianDate expected = PersianDate.of(1390, 12, 10);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ldt));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianInPersianLeapYear() {
         LocalDate ldt = LocalDate.of(2034, 3, 20);
         PersianDate expected = PersianDate.of(1412, 12, 30);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ldt));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2008, 1, 1);
         PersianDate expected = PersianDate.of(1386, 10, 11);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ldt));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnEndOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2003, 3, 1);
         PersianDate expected = PersianDate.of(1381, 12, 10);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ldt));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfPersianYear() {
         LocalDate ldt = LocalDate.of(1986, 3, 21);
         PersianDate expected = PersianDate.of(1365, 1, 1);
-        assertReflectionEquals(expected, PersianDate.gregorianToPersian(ldt));
+        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
     }
 
     //-----------------------------------------------------------------------
@@ -230,9 +455,64 @@ public class PersianDateTest {
     //-----------------------------------------------------------------------
     @Test
     public void testOnToString() {
-        PersianDate persianDate1 = PersianDate.of(1391, 11, 6);
-        assertEquals("1391-11-06", persianDate1.toString());
-        PersianDate persianDate2 = PersianDate.of(31, 1, 12);
-        assertEquals("0031-01-12", persianDate2.toString());
+        PersianDate PersianDate1 = PersianDate.of(1391, 11, 6);
+        assertEquals("1391-11-06", PersianDate1.toString());
+        PersianDate PersianDate2 = PersianDate.of(31, 1, 12);
+        assertEquals("0031-01-12", PersianDate2.toString());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnUntilTemporalDays(){
+        PersianDate pd1 = PersianDate.of(1400, 1, 1);
+        PersianDate pd2 = PersianDate.of(1401, 1, 1);
+        assertEquals(365, pd1.until(pd2, DAYS));
+        assertEquals(-365, pd2.until(pd1, DAYS));
+        assertEquals(10365, pd1.until(pd2.plusDays(10000), DAYS));
+        assertEquals(-10365, pd2.until(pd1.plusDays(-10000), DAYS));
+    }
+
+    @Test
+    public void testOnUntilTemporalMonths(){
+        PersianDate pd1 = PersianDate.of(1396, 1, 1);
+        PersianDate pd2 = PersianDate.of(1396, 2, 1);
+        assertEquals(1, pd1.until(pd2, MONTHS));
+        assertEquals(-1, pd2.until(pd1, MONTHS));
+        assertEquals(0, pd1.until(pd2.plusDays(-1), MONTHS));
+        assertEquals(2, pd1.until(pd2.plusDays(31), MONTHS));
+        // End of year
+        pd1 = PersianDate.of(1387, 12, 1);
+        pd2 = PersianDate.of(1388, 1, 1);
+        assertEquals(1, pd1.until(pd2, MONTHS));
+        assertEquals(-1, pd2.until(pd1, MONTHS));
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testOnUntilChronoLocalDate1(){
+        PersianDate pd1 = PersianDate.of(1380, 7, 16);
+        PersianDate pd2 = PersianDate.of(1400, 2, 21);
+        ChronoPeriod pd1UntilPd2= pd1.until(pd2);
+        assertEquals(19, pd1UntilPd2.get(YEARS));
+        assertEquals(7, pd1UntilPd2.get(MONTHS));
+        assertEquals(5, pd1UntilPd2.get(DAYS));
+        ChronoPeriod pd2UntilPd1 = pd2.until(pd1);
+        assertEquals(-19, pd2UntilPd1.get(YEARS));
+        assertEquals(-7, pd2UntilPd1.get(MONTHS));
+        assertEquals(-5, pd2UntilPd1.get(DAYS));
+    }
+
+    @Test
+    public void testOnUntilChronoLocalDate2(){
+        PersianDate pd1 = PersianDate.of(1396, 5, 10);
+        PersianDate pd2 = PersianDate.of(1400, 11, 3);
+        ChronoPeriod pd1UntilPd2= pd1.until(pd2);
+        assertEquals(4, pd1UntilPd2.get(YEARS));
+        assertEquals(5, pd1UntilPd2.get(MONTHS));
+        assertEquals(23, pd1UntilPd2.get(DAYS));
+        ChronoPeriod pd2UntilPd1 = pd2.until(pd1);
+        assertEquals(-4, pd2UntilPd1.get(YEARS));
+        assertEquals(-5, pd2UntilPd1.get(MONTHS));
+        assertEquals(-24, pd2UntilPd1.get(DAYS));
     }
 }
