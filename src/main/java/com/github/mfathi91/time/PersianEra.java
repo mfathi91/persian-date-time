@@ -11,6 +11,20 @@ import java.time.temporal.ValueRange;
 
 import static java.time.temporal.ChronoField.ERA;
 
+/**
+ * An era in the Persian calendar system.
+ * <p>
+ * The Persian calendar system has only one era covering the
+ * proleptic years greater than zero.
+ * <p>
+ * <b>Do not use {@code ordinal()} to obtain the numeric representation of {@code PersianEra}.
+ * Use {@code getValue()} instead.</b>
+ *
+ * <p>
+ * This is an immutable and thread-safe enum.
+ *
+ * @author Mahmoud Fathi
+ */
 @Immutable
 public enum PersianEra implements Era {
 

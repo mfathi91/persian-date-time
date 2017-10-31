@@ -7,6 +7,8 @@ import net.jcip.annotations.ThreadSafe;
  * It is not possible to get an instance of this class.
  * <p>
  * This class is stateless and thread-safe.
+ *
+ * @author Mahmoud Fathi
  */
 @ThreadSafe
 public class MyUtils {

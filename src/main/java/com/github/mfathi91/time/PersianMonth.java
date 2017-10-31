@@ -18,6 +18,8 @@ import net.jcip.annotations.Immutable;
  * Use {@code getValue()} instead.</b>
  * <p>
  * This is an immutable enum and can be used in concurrent programs.
+ *
+ * @author Mahmoud Fathi
  */
 @Immutable
 public enum PersianMonth {

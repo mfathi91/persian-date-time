@@ -17,9 +17,21 @@ import java.util.List;
 import static java.time.temporal.ChronoField.EPOCH_DAY;
 import static java.time.temporal.ChronoField.YEAR;
 
+/**
+ * The Persian calendar (also known as Jalali calendar or Iranian calendar) is a solar calendar.
+ * PersianChronology follows the rules of Persian Calendar.
+ * <p>
+ * Length of each month is between 29 to 31 days. Details of each month is implemented in
+ * {@link PersianMonth} enum.
+ * <p>
+ * Normal yeras have 365 days and leap years have 366 days.
+ * <p>
+ * This is an immutable and thread-safe enum.
+ *
+ * @author Mahmoud Fathi
+ */
 @Immutable
 public final class PersianChronology extends AbstractChronology {
-
     /**
      * Single instance of this class.
      */
