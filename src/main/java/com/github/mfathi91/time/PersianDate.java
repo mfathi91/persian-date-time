@@ -12,8 +12,7 @@ import java.time.chrono.Chronology;
 import java.time.temporal.*;
 import java.util.Objects;
 
-import static java.time.temporal.ChronoField.ERA;
-import static java.time.temporal.ChronoField.PROLEPTIC_MONTH;
+import static java.time.temporal.ChronoField.*;
 
 /**
  * This is an implementation of Solar Hijri calendar (also known as Jalali calendar,
@@ -220,8 +219,8 @@ public final class PersianDate implements ChronoLocalDate {
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
     private PersianDate(int year, int month, int dayOfMonth) {
-        PersianChronology.INSTANCE.checkValidYear(year);
-        PersianChronology.INSTANCE.checkValidMonth(month);
+        PersianChronology.INSTANCE.checkValidValue(year, YEAR);
+        PersianChronology.INSTANCE.checkValidValue(month, MONTH_OF_YEAR);
         boolean leapYear = PersianChronology.INSTANCE.isLeapYear(year);
         int maxDaysOfMonth = PersianMonth.of(month).length(leapYear);
         MyUtils.intRequireRange(dayOfMonth, 1, maxDaysOfMonth, "dayOfMonth");
@@ -231,6 +230,7 @@ public final class PersianDate implements ChronoLocalDate {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the chronology of this date, which is the Persian calendar system.
      * <p>
@@ -364,7 +364,7 @@ public final class PersianDate implements ChronoLocalDate {
      * </pre>
      * The choice should be made based on which makes the code more readable.
      *
-     * @param endDateExclusive  the end date, exclusive, which may be in any chronology, not null
+     * @param endDateExclusive the end date, exclusive, which may be in any chronology, not null
      * @return the period between this date and the end date, not null
      */
     @Override

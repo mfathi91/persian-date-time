@@ -6,11 +6,9 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.chrono.AbstractChronology;
+import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.Era;
-import java.time.temporal.ChronoField;
-import java.time.temporal.JulianFields;
-import java.time.temporal.TemporalAccessor;
-import java.time.temporal.ValueRange;
+import java.time.temporal.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +36,7 @@ public final class PersianChronology extends AbstractChronology {
     public static final PersianChronology INSTANCE = new PersianChronology();
 
     //-----------------------------------------------------------------------
+
     /**
      * Restricted constructor.
      */
@@ -47,16 +46,19 @@ public final class PersianChronology extends AbstractChronology {
     //-----------------------------------------------------------------------
 
     /**
-     * Checks whther parameter {@code year} is valid or not. If {@code year} is out
-     * of range, an IllegalArgumentException will be thrown, otherwise {@code year}
-     * is returned.
+     * Checks whther parameter {@code value} is valid or not. If {@code value} is out
+     * of range, an DateTimeException will be thrown with a suitable message.
      *
-     * @param year year to be checked, valid range is from minimum year to maximum year
-     * @return the same value as parameter {@code year}
+     * @param value value to check
      */
-    long checkValidYear(long year) {
-        return MyUtils.longRequireRange(year, INSTANCE.range(YEAR).getMinimum(),
-                INSTANCE.range(YEAR).getMaximum(), "year");
+    void checkValidValue(long value, TemporalField field) {
+        if(field == null){
+            throw new DateTimeException("Invalid value (valid values " + this + "): " + value);
+        }else if(!(field instanceof ChronoField)){
+            throw new DateTimeException("Parameter 'field' is not supported");
+        }else if(!MyUtils.isBetween(value, field.range().getMinimum(), field.range().getMaximum())){
+            throw new DateTimeException("Invalid value for " + field + " (valid values " + this + "): " + value);
+        }
     }
 
     /**
@@ -82,38 +84,106 @@ public final class PersianChronology extends AbstractChronology {
      * @return {@code dayOfYear}
      */
     int checkDayOfYear(int year, int dayOfYear) {
-        checkValidYear(year);
+        checkValidValue(year, YEAR);
         int maxDayOfYear = isLeapYear(year) ? 366 : 365;
         return MyUtils.intRequireRange(dayOfYear, 1, maxDayOfYear, "dayOfYear");
     }
 
     //-----------------------------------------------------------------------
+
+    /**
+     * Gets the ID of the chronology.
+     * <p>
+     * The ID uniquely identifies the {@code Chronology}. It can be used to
+     * lookup the {@code Chronology} using {@link #of(String)}.
+     *
+     * @return the chronology ID, non-null
+     * @see #getCalendarType()
+     */
     @Override
     public String getId() {
         return "Persian";
     }
 
+    /**
+     * Gets the calendar type of the Islamic calendar.
+     * <p>
+     * The calendar type is an identifier defined by the
+     * <em>Unicode Locale Data Markup Language (LDML)</em> specification.
+     * It can be used to lookup the {@code Chronology} using {@link #of(String)}.
+     *
+     * @return the calendar system type; non-null if the calendar has
+     * a standard type, otherwise null
+     * @see #getId()
+     */
     @Override
     public String getCalendarType() {
         return "persian";
     }
 
+    /**
+     * Obtains a local date in this chronology from the proleptic-year,
+     * month-of-year and day-of-month fields.
+     *
+     * @param prolepticYear the chronology proleptic-year
+     * @param month         the chronology month-of-year
+     * @param dayOfMonth    the chronology day-of-month
+     * @return the local date in this chronology, not null
+     * @throws DateTimeException if unable to create the date
+     */
     @Override
     public PersianDate date(int prolepticYear, int month, int dayOfMonth) {
         return PersianDate.of(prolepticYear, month, dayOfMonth);
     }
 
+    /**
+     * Obtains a local date in this chronology from the proleptic-year and
+     * day-of-year fields.
+     *
+     * @param prolepticYear the chronology proleptic-year
+     * @param dayOfYear     the chronology day-of-year
+     * @return the local date in this chronology, not null
+     * @throws DateTimeException if unable to create the date
+     */
     @Override
     public PersianDate dateYearDay(int prolepticYear, int dayOfYear) {
         checkDayOfYear(prolepticYear, dayOfYear);
         return PersianDate.of(prolepticYear, 1, 1).plusDays(dayOfYear - 1);
     }
 
+    /**
+     * Obtains a local date in this chronology from the epoch-day.
+     * <p>
+     * The definition of {@link ChronoField#EPOCH_DAY EPOCH_DAY} is the same
+     * for all calendar systems, thus it can be used for conversion.
+     *
+     * @param epochDay the epoch day
+     * @return the local date in this chronology, not null
+     * @throws DateTimeException if unable to create the date
+     */
     @Override
     public PersianDate dateEpochDay(long epochDay) {
         return PersianDate.ofJulianDays(LocalDate.ofEpochDay(epochDay).getLong(JulianFields.JULIAN_DAY) - 1);
     }
 
+    /**
+     * Obtains a local date in this chronology from another temporal object.
+     * <p>
+     * This obtains a date in this chronology based on the specified temporal.
+     * A {@code TemporalAccessor} represents an arbitrary set of date and time information,
+     * which this factory converts to an instance of {@code ChronoLocalDate}.
+     * <p>
+     * The conversion typically uses the {@link ChronoField#EPOCH_DAY EPOCH_DAY}
+     * field, which is standardized across calendar systems.
+     * <p>
+     * This method matches the signature of the functional interface {@link TemporalQuery}
+     * allowing it to be used as a query via method reference, {@code aChronology::date}.
+     *
+     * @param temporal the temporal object to convert, not null
+     * @return the local date in this chronology, not null
+     * @throws DateTimeException if unable to create the date
+     * @see ChronoLocalDate#from(TemporalAccessor)
+     */
     @Override
     public PersianDate date(TemporalAccessor temporal) {
         if (temporal instanceof PersianDate) {
@@ -126,37 +196,84 @@ public final class PersianChronology extends AbstractChronology {
      * Returns true if {@code year} is a leap year in Persian calendar.
      *
      * @param year the year to be checked whether is a leap year or not. For valid
-     *                      range, check {@link #range(ChronoField YEAR)}.
+     *             range, check {@link #range(ChronoField YEAR)}.
      * @return true if {@code year} is a leap year in Persian calendar
      */
     @Override
     public boolean isLeapYear(long year) {
-        checkValidYear(year);
-        return PersianDate.toJulianDay((int) (year+1), 1, 1) -
+        checkValidValue(year, YEAR);
+        return PersianDate.toJulianDay((int) (year + 1), 1, 1) -
                 PersianDate.toJulianDay((int) year, 1, 1) > 365;
     }
 
+    /**
+     * Calculates the proleptic-year given the era and year-of-era.
+     * <p>
+     * This combines the era and year-of-era into the single proleptic-year field.
+     *
+     * @param era       the era of the correct type for the chronology, not null
+     * @param yearOfEra the chronology year-of-era
+     * @return the proleptic-year
+     * @throws DateTimeException  if unable to convert to a proleptic-year,
+     *                            such as if the year is invalid for the era
+     * @throws ClassCastException if the {@code era} is not of the correct type for the chronology
+     */
     @Override
     public int prolepticYear(Era era, int yearOfEra) {
-        if (era instanceof PersianEra == false) {
+        if (!(era instanceof PersianEra)) {
             throw new ClassCastException("Era must be PersianEra");
         }
         return yearOfEra;
     }
 
+    /**
+     * Creates the chronology era object from the numeric value.
+     * <p>
+     * The era is, conceptually, the largest division of the time-line.
+     * Most calendar systems have a single epoch dividing the time-line into two eras.
+     * However, some have multiple eras, such as one for the reign of each leader.
+     * The exact meaning is determined by the chronology according to the following constraints.
+     * <p>
+     * This method returns the singleton era of the correct type for the specified era value.
+     *
+     * @param eraValue the era value
+     * @return the calendar system era, not null
+     * @throws DateTimeException if unable to create the era
+     */
     @Override
     public Era eraOf(int eraValue) {
-        if(eraValue == 1){
+        if (eraValue == 1) {
             return PersianEra.AHS;
         }
         throw new DateTimeException("invalid Persian era");
     }
 
+    /**
+     * Gets the list of eras for the chronology.
+     *
+     * @return the list of eras for the chronology, may be immutable, not null
+     */
     @Override
     public List<Era> eras() {
         return Arrays.asList(PersianEra.values());
     }
 
+    /**
+     * Gets the range of valid values for the specified field.
+     * <p>
+     * All fields can be expressed as a {@code long} integer.
+     * This method returns an object that describes the valid range for that value.
+     * <p>
+     * Note that the result only describes the minimum and maximum valid values
+     * and it is important not to read too much into them. For example, there
+     * could be values within the range that are invalid for the field.
+     * <p>
+     * This method will return a result whether or not the chronology supports the field.
+     *
+     * @param field the field to get the range for, not null
+     * @return the range of valid values for the field, not null
+     * @throws DateTimeException if the range for the field cannot be obtained
+     */
     @Override
     public ValueRange range(ChronoField field) {
         switch (field) {
