@@ -4,7 +4,7 @@
 
     <groupId>com.github.mfathi91</groupId>
     <artifactId>persian-date-time</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <packaging>jar</packaging>
 
     <name>Persian Date Time</name>

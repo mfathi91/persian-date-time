@@ -373,7 +373,6 @@ public final class PersianDate implements ChronoLocalDate {
         PersianDate end = PersianChronology.INSTANCE.date(endDateExclusive);
         long totalMonths = end.getLong(PROLEPTIC_MONTH) - this.getLong(PROLEPTIC_MONTH);  // safe
         int days = end.day - this.day;
-        System.out.println("totalMonths: " + totalMonths + " , days: " + days);
         if (totalMonths > 0 && days < 0) {
             totalMonths--;
             PersianDate calcDate = this.plusMonths(totalMonths);

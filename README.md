@@ -14,7 +14,7 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>3.0.1</version>
+  <version>3.0.2</version>
 </dependency>
 ```
 
