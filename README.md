@@ -1,4 +1,6 @@
 ![Omar Khayyam](http://www.untoldiran.com/image/khayam02.jpg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mfathi91/persian-date-time/badge.svg)](http://search.maven.org/#search|ga|1|com.github.mfathi91)
+[![Travis IC](https://travis-ci.org/mfathi91/persian-date-time.svg?branch=master)](https://travis-ci.org/mfathi91/persian-date-time)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/47c6af41e1fe49c3adad26a5629314cd)](https://www.codacy.com/app/mfathi91/persian-date-time?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mfathi91/persian-date-time&amp;utm_campaign=Badge_Grade)
 # Persian Date Time
 
