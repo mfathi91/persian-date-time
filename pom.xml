@@ -53,6 +53,7 @@
         <maven-javadoc-plugin-version>3.0.0-M1</maven-javadoc-plugin-version>
         <maven-gpg-plugin-version>1.6</maven-gpg-plugin-version>
         <nexus-staging-plugin-version>1.6.7</nexus-staging-plugin-version>
+        <cobertura-maven-plugin-version>2.7</cobertura-maven-plugin-version>
     </properties>
 
     <dependencies>
@@ -132,6 +133,20 @@
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- Cobertura (code coverage) plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>${cobertura-maven-plugin-version}</version>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <check />
                 </configuration>
             </plugin>
         </plugins>
