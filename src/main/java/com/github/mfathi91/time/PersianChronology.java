@@ -11,6 +11,7 @@ import java.time.chrono.Era;
 import java.time.temporal.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static java.time.temporal.ChronoField.EPOCH_DAY;
 import static java.time.temporal.ChronoField.YEAR;
@@ -52,25 +53,14 @@ public final class PersianChronology extends AbstractChronology {
      * @param value value to check
      */
     void checkValidValue(long value, TemporalField field) {
-        if(field == null){
-            throw new DateTimeException("Invalid value (valid values " + this + "): " + value);
-        }else if(!(field instanceof ChronoField)){
+        Objects.requireNonNull(field, "field");
+        if(!(field instanceof ChronoField)){
             throw new DateTimeException("Parameter 'field' is not supported");
-        }else if(!MyUtils.isBetween(value, field.range().getMinimum(), field.range().getMaximum())){
-            throw new DateTimeException("Invalid value for " + field + " (valid values " + this + "): " + value);
         }
-    }
-
-    /**
-     * Checks whther parameter {@code month} is valid or not. If {@code month} is out
-     * of range, an IllegalArgumentException will be thrown, otherwise {@code month}
-     * is returned.
-     *
-     * @param month month to be checked, valid range is from 1 to 12
-     * @return the same value as parameter {@code month}
-     */
-    int checkValidMonth(int month) {
-        return Month.of(month).getValue();
+        ChronoField cf = (ChronoField) field;
+        if(!MyUtils.isBetween(value, range(cf).getMinimum(), range(cf).getMaximum())){
+            throw new DateTimeException("Invalid value for " + field + ", valid values: " + range(cf));
+        }
     }
 
     /**
@@ -83,10 +73,12 @@ public final class PersianChronology extends AbstractChronology {
      * @param dayOfYear the day-of-year to be checked, from 1 to 365 or 366 in a leap year
      * @return {@code dayOfYear}
      */
-    int checkDayOfYear(int year, int dayOfYear) {
+    void checkDayOfYear(int year, int dayOfYear) {
         checkValidValue(year, YEAR);
         int maxDayOfYear = isLeapYear(year) ? 366 : 365;
-        return MyUtils.intRequireRange(dayOfYear, 1, maxDayOfYear, "dayOfYear");
+        if(!MyUtils.isBetween(dayOfYear, 1, maxDayOfYear)){
+            throw new DateTimeException("Invalid value for dayOfYear: " + dayOfYear + " ");
+        }
     }
 
     //-----------------------------------------------------------------------

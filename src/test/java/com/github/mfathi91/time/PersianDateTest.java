@@ -2,6 +2,7 @@ package com.github.mfathi91.time;
 
 import org.junit.Test;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.chrono.ChronoPeriod;
@@ -14,12 +15,41 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 public class PersianDateTest {
 
     @Test
+    public void testOnStaticFactoryMethodNow() {
+        assertReflectionEquals(PersianDate.ofGregorian(LocalDate.now()), PersianDate.now());
+    }
+
+    @Test
     public void testOnStaticFactoryMethod1() {
         PersianDate pd = PersianDate.of(1400, 2, 17);
         assertEquals(1400, pd.getYear());
         assertEquals(2, pd.getMonthValue());
         assertEquals(PersianMonth.ORDIBEHESHT, pd.getMonth());
         assertEquals(17, pd.getDayOfMonth());
+    }
+
+    @Test
+    public void testOnStaticFactoryMethod2() {
+        PersianDate pd = PersianDate.of(1623, PersianMonth.AZAR, 10);
+        assertEquals(1623, pd.getYear());
+        assertEquals(9, pd.getMonthValue());
+        assertEquals(PersianMonth.AZAR, pd.getMonth());
+        assertEquals(10, pd.getDayOfMonth());
+    }
+
+    @Test(expected = DateTimeException.class)
+    public void testOnPersianDateOfInvalidDateNotLeapYear() {
+        PersianDate.of(1388, 12, 30);
+    }
+
+    @Test(expected = DateTimeException.class)
+    public void testOnPersianDateOfInvalidDate() {
+        PersianDate.of(2000, 12, 2);
+    }
+
+    @Test(expected = DateTimeException.class)
+    public void testOnPersianDatePlus(){
+        PersianDate.of(1890, 6, 31).plusYears(120);
     }
 
     //-----------------------------------------------------------------------
@@ -223,7 +253,7 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnGetLengthOfMonth(){
+    public void testOnGetLengthOfMonth() {
         // 1387 is a leap year
         assertEquals(31, PersianDate.of(1387, 1, 1).lengthOfMonth());
         assertEquals(30, PersianDate.of(1387, 12, 1).lengthOfMonth());
@@ -463,7 +493,7 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnUntilTemporalDays(){
+    public void testOnUntilTemporalDays() {
         PersianDate pd1 = PersianDate.of(1400, 1, 1);
         PersianDate pd2 = PersianDate.of(1401, 1, 1);
         assertEquals(365, pd1.until(pd2, DAYS));
@@ -473,7 +503,7 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnUntilTemporalMonths(){
+    public void testOnUntilTemporalMonths() {
         PersianDate pd1 = PersianDate.of(1396, 1, 1);
         PersianDate pd2 = PersianDate.of(1396, 2, 1);
         assertEquals(1, pd1.until(pd2, MONTHS));
@@ -489,10 +519,10 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnUntilChronoLocalDate1(){
+    public void testOnUntilChronoLocalDate1() {
         PersianDate pd1 = PersianDate.of(1380, 7, 16);
         PersianDate pd2 = PersianDate.of(1400, 2, 21);
-        ChronoPeriod pd1UntilPd2= pd1.until(pd2);
+        ChronoPeriod pd1UntilPd2 = pd1.until(pd2);
         assertEquals(19, pd1UntilPd2.get(YEARS));
         assertEquals(7, pd1UntilPd2.get(MONTHS));
         assertEquals(5, pd1UntilPd2.get(DAYS));
@@ -503,10 +533,10 @@ public class PersianDateTest {
     }
 
     @Test
-    public void testOnUntilChronoLocalDate2(){
+    public void testOnUntilChronoLocalDate2() {
         PersianDate pd1 = PersianDate.of(1396, 5, 10);
         PersianDate pd2 = PersianDate.of(1400, 11, 3);
-        ChronoPeriod pd1UntilPd2= pd1.until(pd2);
+        ChronoPeriod pd1UntilPd2 = pd1.until(pd2);
         assertEquals(4, pd1UntilPd2.get(YEARS));
         assertEquals(5, pd1UntilPd2.get(MONTHS));
         assertEquals(23, pd1UntilPd2.get(DAYS));

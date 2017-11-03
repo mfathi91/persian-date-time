@@ -1,5 +1,5 @@
 ![Omar Khayyam](http://www.untoldiran.com/image/khayam02.jpg)
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/47c6af41e1fe49c3adad26a5629314cd)](https://www.codacy.com/app/mfathi91/persian-date-time?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mfathi91/persian-date-time&amp;utm_campaign=Badge_Grade)
 # Persian Date Time
 
 This library is an implementation of [Solar Hijri calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar) (also known as Jalali calendar or Persian calendar). It is an immutable and thread-safe implementation of Persian calendar system, and can be used in multi-threaded programs.
@@ -14,7 +14,7 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 </dependency>
 ```
 

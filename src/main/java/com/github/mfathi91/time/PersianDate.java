@@ -2,10 +2,7 @@ package com.github.mfathi91.time;
 
 import net.jcip.annotations.Immutable;
 
-import java.time.DateTimeException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoPeriod;
 import java.time.chrono.Chronology;
@@ -120,7 +117,7 @@ public final class PersianDate implements ChronoLocalDate {
      * @return current Persian date from the system clock in the default time zone
      */
     public static PersianDate now() {
-        return ofJulianDays(LocalDate.now().getLong(JulianFields.JULIAN_DAY) - 1);
+        return ofEpochDay(LocalDate.now().toEpochDay());
     }
 
     /**
@@ -223,7 +220,12 @@ public final class PersianDate implements ChronoLocalDate {
         PersianChronology.INSTANCE.checkValidValue(month, MONTH_OF_YEAR);
         boolean leapYear = PersianChronology.INSTANCE.isLeapYear(year);
         int maxDaysOfMonth = PersianMonth.of(month).length(leapYear);
-        MyUtils.intRequireRange(dayOfMonth, 1, maxDaysOfMonth, "dayOfMonth");
+        if (dayOfMonth > maxDaysOfMonth) {
+            if (month == 12 && dayOfMonth == 30 && !leapYear) {
+                throw new DateTimeException("Invalid date ESFAND 30, as " + year + " is not a leap year");
+            }
+            throw new DateTimeException("Invalid date " + PersianMonth.of(month).name() + " " + dayOfMonth);
+        }
         this.year = year;
         this.month = month;
         this.day = dayOfMonth;
