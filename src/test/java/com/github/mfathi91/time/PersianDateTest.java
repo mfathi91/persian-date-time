@@ -7,7 +7,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.ChronoField;
+import java.time.temporal.UnsupportedTemporalTypeException;
 
+import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.junit.Assert.*;
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
@@ -43,13 +45,18 @@ public class PersianDateTest {
     }
 
     @Test(expected = DateTimeException.class)
-    public void testOnPersianDateOfInvalidDate() {
+    public void testOnPersianDateOfInvalidDate1() {
         PersianDate.of(2000, 12, 2);
     }
 
     @Test(expected = DateTimeException.class)
-    public void testOnPersianDatePlus(){
+    public void testOnPersianDatePlus() {
         PersianDate.of(1890, 6, 31).plusYears(120);
+    }
+
+    @Test(expected = DateTimeException.class)
+    public void testOnPersianDateInvalidDate2() {
+        PersianDate.of(1000, 4, 32);
     }
 
     //-----------------------------------------------------------------------
@@ -130,6 +137,11 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
+    public void testOnPlusMonthsZero() {
+        assertEquals(PersianDate.MIN, PersianDate.MIN.plusMonths(0));
+    }
+
+    @Test
     public void testOnPlusMonths() {
         PersianDate actual = PersianDate.of(1388, 1, 1).plusMonths(1);
         PersianDate expected = PersianDate.of(1388, 2, 1);
@@ -194,6 +206,11 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
+    public void testOnPlusDaysZero() {
+        assertEquals(PersianDate.MIN, PersianDate.MIN.plusDays(0));
+    }
+
+    @Test
     public void testOnPlusDays() {
         PersianDate actual = PersianDate.of(1450, 6, 31).plusDays(1);
         PersianDate expected = PersianDate.of(1450, 7, 1);
@@ -244,6 +261,19 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
+    public void testOnIsLeapYear() {
+        PersianDate pd = PersianDate.of(1375, 6, 15);
+        // 7 successive leap years
+        for (int i = 0; i < 7; i++) {
+            assertTrue(pd.isLeapYear());
+            pd = pd.plusYears(4);
+        }
+        // each 33 years, leap year happens after 5 years
+        assertTrue(pd.plusYears(1).isLeapYear());
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
     public void testOnToEpochDay() {
         assertEquals(17468, PersianDate.of(1396, 8, 7).toEpochDay());
         assertEquals(-66869, PersianDate.of(1165, 9, 11).toEpochDay());
@@ -279,9 +309,16 @@ public class PersianDateTest {
     @Test
     public void testOnGetLongAlignedDayOfWeekInMonth() {
         PersianDate pd = PersianDate.of(1396, 8, 8);
-        assertEquals(1, pd.getLong(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH));
+        assertEquals(1, pd.getLong(ALIGNED_DAY_OF_WEEK_IN_MONTH));
         pd = PersianDate.of(1292, 12, 30);
-        assertEquals(2, pd.getLong(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH));
+        assertEquals(2, pd.getLong(ALIGNED_DAY_OF_WEEK_IN_MONTH));
+    }
+
+    @Test
+    public void testOnGetAlignedDayOfWeekInYear() {
+        assertEquals(1, PersianDate.MIN.getLong(ALIGNED_DAY_OF_WEEK_IN_YEAR));
+        assertEquals(3, PersianDate.of(1000, 12, 24).getLong(ALIGNED_DAY_OF_WEEK_IN_YEAR));
+        assertEquals(1, PersianDate.MAX.getLong(ALIGNED_DAY_OF_WEEK_IN_YEAR));
     }
 
     @Test
@@ -298,6 +335,37 @@ public class PersianDateTest {
         assertEquals(9, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
         pd = PersianDate.of(1999, 11, 30);
         assertEquals(48, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
+    }
+
+    @Test
+    public void testOnGetLongDayOfMonth() {
+        assertEquals(31, PersianDate.of(200, 4, 31).getLong(DAY_OF_MONTH));
+    }
+
+    @Test
+    public void testOnGetLongDayOfYear() {
+        assertEquals(124, PersianDate.of(14, 4, 31).getLong(DAY_OF_YEAR));
+    }
+
+    @Test
+    public void testOnGetLongYearOfEra() {
+        assertEquals(1781, PersianDate.of(1781, 11, 27).getLong(YEAR_OF_ERA));
+    }
+
+    @Test
+    public void testOnGetLongYear() {
+        assertEquals(451, PersianDate.of(451, 8, 21).getLong(YEAR));
+    }
+
+    @Test
+    public void testOnGetLongMonthOfYear() {
+        assertEquals(1, PersianDate.MIN.getLong(MONTH_OF_YEAR));
+        assertEquals(12, PersianDate.MAX.getLong(MONTH_OF_YEAR));
+    }
+
+    @Test(expected = UnsupportedTemporalTypeException.class)
+    public void testOnGetLongUnsupportedTemporal() {
+        PersianDate.of(151, 12, 11).getLong(NANO_OF_DAY);
     }
 
     @Test
@@ -500,6 +568,47 @@ public class PersianDateTest {
         assertEquals(-365, pd2.until(pd1, DAYS));
         assertEquals(10365, pd1.until(pd2.plusDays(10000), DAYS));
         assertEquals(-10365, pd2.until(pd1.plusDays(-10000), DAYS));
+    }
+
+    @Test
+    public void testOnUntilTemporalWeeks() {
+        PersianDate pd1 = PersianDate.of(1400, 1, 1);
+        PersianDate pd2 = PersianDate.of(1401, 1, 1);
+        assertEquals(52, pd1.until(pd2, WEEKS));
+    }
+
+    @Test
+    public void testOnUntilTemporalYears() {
+        PersianDate pd1 = PersianDate.of(1000, 1, 1);
+        PersianDate pd2 = PersianDate.of(1999, 12, 29);
+        assertEquals(999, pd1.until(pd2, YEARS));
+        assertEquals(1998, PersianDate.MIN.until(PersianDate.MAX, YEARS));
+    }
+
+    @Test
+    public void testOnUntilTemporalDecades() {
+        assertEquals(199, PersianDate.MIN.until(PersianDate.MAX, DECADES));
+    }
+
+    @Test
+    public void testOnUntilTemporalCenturies() {
+        assertEquals(19, PersianDate.MIN.until(PersianDate.MAX, CENTURIES));
+    }
+
+    @Test
+    public void testOnUntilTemporalMillennia() {
+        assertEquals(1, PersianDate.MIN.until(PersianDate.MAX, MILLENNIA));
+        assertEquals(0, PersianDate.MIN.plusYears(1000).until(PersianDate.MAX, MILLENNIA));
+    }
+
+    @Test
+    public void testOnUntilTemporalEra() {
+        assertEquals(0, PersianDate.MIN.until(PersianDate.MAX, ERAS));
+    }
+
+    @Test(expected = UnsupportedTemporalTypeException.class)
+    public void testOnUntilTemproalUnsoppurted() {
+        PersianDate.MIN.until(PersianDate.MAX, NANOS);
     }
 
     @Test

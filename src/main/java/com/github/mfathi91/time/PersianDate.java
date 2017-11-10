@@ -309,6 +309,7 @@ public final class PersianDate implements ChronoLocalDate {
     @Override
     public long until(Temporal endExclusive, TemporalUnit unit) {
         Objects.requireNonNull(endExclusive, "endExclusive");
+        Objects.requireNonNull(unit, "unit");
         PersianDate end = (PersianDate) getChronology().date(endExclusive);
         if (unit instanceof ChronoUnit) {
             switch ((ChronoUnit) unit) {
@@ -323,7 +324,6 @@ public final class PersianDate implements ChronoLocalDate {
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
-        Objects.requireNonNull(unit, "unit");
         return unit.between(this, end);
     }
 
