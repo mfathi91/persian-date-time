@@ -300,7 +300,7 @@ public class PersianDateTest {
         DayOfWeek dow = DayOfWeek.FRIDAY;
         // Check about three years
         for (int i = 0; i < 1000; i++) {
-            assertEquals(dow.getValue(), pd.getLong(ChronoField.DAY_OF_WEEK));
+            assertEquals(dow.getValue(), pd.getLong(DAY_OF_WEEK));
             pd = pd.plusDays(1);
             dow = dow.plus(1);
         }
@@ -324,17 +324,17 @@ public class PersianDateTest {
     @Test
     public void testOnGetLongAlignedWeekOfMonth() {
         PersianDate pd = PersianDate.of(1345, 7, 16);
-        assertEquals(3, pd.getLong(ChronoField.ALIGNED_WEEK_OF_MONTH));
+        assertEquals(3, pd.getLong(ALIGNED_WEEK_OF_MONTH));
         pd = PersianDate.of(1500, 11, 1);
-        assertEquals(1, pd.getLong(ChronoField.ALIGNED_WEEK_OF_MONTH));
+        assertEquals(1, pd.getLong(ALIGNED_WEEK_OF_MONTH));
     }
 
     @Test
     public void testOnGetLongALignedWeekOfYear() {
         PersianDate pd = PersianDate.of(1612, 2, 31);
-        assertEquals(9, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
+        assertEquals(9, pd.getLong(ALIGNED_WEEK_OF_YEAR));
         pd = PersianDate.of(1999, 11, 30);
-        assertEquals(48, pd.getLong(ChronoField.ALIGNED_WEEK_OF_YEAR));
+        assertEquals(48, pd.getLong(ALIGNED_WEEK_OF_YEAR));
     }
 
     @Test
@@ -371,9 +371,9 @@ public class PersianDateTest {
     @Test
     public void testOnProlepticMonth() {
         PersianDate pd = PersianDate.of(1612, 2, 31);
-        assertEquals(19345, pd.getLong(ChronoField.PROLEPTIC_MONTH));
+        assertEquals(19345, pd.getLong(PROLEPTIC_MONTH));
         pd = PersianDate.of(1999, 11, 30);
-        assertEquals(23998, pd.getLong(ChronoField.PROLEPTIC_MONTH));
+        assertEquals(23998, pd.getLong(PROLEPTIC_MONTH));
     }
 
     //-----------------------------------------------------------------------

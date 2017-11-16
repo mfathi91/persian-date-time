@@ -35,13 +35,13 @@ public final class PersianDate implements ChronoLocalDate {
      * The maximum supported persian date.
      */
     public static final PersianDate MIN =
-            PersianDate.of((int) PersianChronology.INSTANCE.range(ChronoField.YEAR).getMinimum(), 1, 1);
+            PersianDate.of((int) PersianChronology.INSTANCE.range(YEAR).getMinimum(), 1, 1);
 
     /**
      * The minimum supported persian date.
      */
     public static final PersianDate MAX =
-            PersianDate.of((int) PersianChronology.INSTANCE.range(ChronoField.YEAR).getMaximum(), 12, 29);
+            PersianDate.of((int) PersianChronology.INSTANCE.range(YEAR).getMaximum(), 12, 29);
 
     /**
      * 1970-01-01 to julidan day.
