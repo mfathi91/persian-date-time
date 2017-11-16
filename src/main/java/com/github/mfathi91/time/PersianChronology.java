@@ -154,7 +154,7 @@ public final class PersianChronology extends AbstractChronology {
      */
     @Override
     public PersianDate dateEpochDay(long epochDay) {
-        return PersianDate.ofJulianDays(LocalDate.ofEpochDay(epochDay).getLong(JulianFields.JULIAN_DAY) - 1);
+        return PersianDate.ofEpochDay(epochDay);
     }
 
     /**
@@ -210,7 +210,7 @@ public final class PersianChronology extends AbstractChronology {
      * @throws ClassCastException if the {@code era} is not of the correct type for the chronology
      */
     @Override
-    public int prolepticYear(Era era, int yearOfEra) {
+    public int  prolepticYear(Era era, int yearOfEra) {
         if (!(era instanceof PersianEra)) {
             throw new ClassCastException("Era must be PersianEra");
         }
