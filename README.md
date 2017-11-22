@@ -40,7 +40,7 @@ It is possible to easily convert Persian date to other calendar systems dates, s
 ```java
 PersianDate persianDate = PersianDate.of(1397, 5, 11);
 LocalDate gregDate1 = persianDate.toGregorian();    // => '2018-08-02'
-// another approach to convert
+// another possible approach to convert
 LocalDate gregDate2 = LocalDate.from(persianDate);  // => '2018-08-02'
 ```
 Converting other calendar system dates, such as Gregorian date would be like the following:
@@ -54,7 +54,7 @@ It is possible to format an instance of PersianDate using _DateTimeFormatter_ cl
 ```java
 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 dtf.format(PersianDate.now());    // => e.g. '1396/05/10'
-// another approach to format
+// another possible approach to format
 PersianDate.now().format(dtf);    // => e.g. '1396/05/10'
 ```
 

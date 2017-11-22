@@ -32,13 +32,13 @@ import static java.time.temporal.ChronoField.*;
 public final class PersianDate implements ChronoLocalDate {
 
     /**
-     * The maximum supported persian date.
+     * The minimum supported persian date.
      */
     public static final PersianDate MIN =
             PersianDate.of((int) PersianChronology.INSTANCE.range(YEAR).getMinimum(), 1, 1);
 
     /**
-     * The minimum supported persian date.
+     * The maximum supported persian date.
      */
     public static final PersianDate MAX =
             PersianDate.of((int) PersianChronology.INSTANCE.range(YEAR).getMaximum(), 12, 29);
@@ -121,9 +121,9 @@ public final class PersianDate implements ChronoLocalDate {
     }
 
     /**
-     * Obtains an instance of {@code PersianDate} with year, month, day of month, hour,
-     * minute and second. The value of month must be between {@code 1} and {@code 12}.
-     * Value {@code 1} would be {@link PersianMonth#FARVARDIN} and value {@code 12} represents
+     * Obtains an instance of {@code PersianDate} with year, month and day of month.
+     * The value of month must be between {@code 1} and {@code 12}. Value {@code 1} would
+     * be {@link PersianMonth#FARVARDIN} and value {@code 12} represents
      * {@link PersianMonth#ESFAND}.
      *
      * @param year       the year to represent, from 1 to MAX_YEAR
@@ -137,8 +137,7 @@ public final class PersianDate implements ChronoLocalDate {
     }
 
     /**
-     * Obtains an instance of {@code PersianDate} with year, month, day of month, hour,
-     * minute and second.
+     * Obtains an instance of {@code PersianDate} with year, month and day of month.
      *
      * @param year       the year to represent, from 1 to MAX_YEAR
      * @param month      the month-of-year to represent, an instance of {@link PersianMonth}
