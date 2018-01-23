@@ -28,7 +28,7 @@ public class MyUtils {
      * @return true if and only if {@code val} is between {@code lowerLimit} and
      * {@code upperLimit}
      */
-    public static boolean isBetween(int val, int lowerLimit, int upperLimit) {
+    static boolean isBetween(int val, int lowerLimit, int upperLimit) {
         return val >= lowerLimit && val <= upperLimit;
     }
 
@@ -42,7 +42,7 @@ public class MyUtils {
      * @return true if and only if {@code val} is between {@code lowerLimit} and
      * {@code upperLimit}
      */
-    public static boolean isBetween(long val, long lowerLimit, long upperLimit) {
+    static boolean isBetween(long val, long lowerLimit, long upperLimit) {
         return val >= lowerLimit && val <= upperLimit;
     }
 
@@ -57,7 +57,7 @@ public class MyUtils {
      * @param valName    the name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is in the range
      */
-    public static int intRequireRange(int val, int lowerLimit, int upperLimit, String valName) {
+    static int intRequireRange(int val, int lowerLimit, int upperLimit, String valName) {
         if (!isBetween(val, lowerLimit, upperLimit)) {
             throw new IllegalArgumentException(valName + " " + val +
                     " is out of valid range [" + lowerLimit + ", " + upperLimit + "]");
@@ -73,7 +73,7 @@ public class MyUtils {
      * @param valName name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is positive
      */
-    public static int intRequirePositive(int val, String valName) {
+    static int intRequirePositive(int val, String valName) {
         if (val <= 0) {
             throw new IllegalArgumentException(valName + " is not positive: " + val);
         }
@@ -88,7 +88,7 @@ public class MyUtils {
      * @param valName name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is positive
      */
-    public static long longRequirePositive(long val, String valName) {
+    static long longRequirePositive(long val, String valName) {
         if (val <= 0) {
             throw new IllegalArgumentException(valName + " is not positive: " + val);
         }
@@ -106,7 +106,7 @@ public class MyUtils {
      * @param valName    the name of {@code val} that is printed in the exception message
      * @return {@code val}, if it is in the range
      */
-    public static long longRequireRange(long val, long lowerLimit, long upperLimit, String valName) {
+    static long longRequireRange(long val, long lowerLimit, long upperLimit, String valName) {
         if (val < lowerLimit || val > upperLimit){
                 throw new IllegalArgumentException(valName + " " + val +
                         " is out of valid range [" + lowerLimit + ", " + upperLimit + "]");
