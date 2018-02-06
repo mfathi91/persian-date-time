@@ -610,11 +610,7 @@ public final class PersianDate implements ChronoLocalDate {
      */
     @Override
     public int hashCode() {
-        int result = 17;
-        result = 31 * result + getYear();
-        result = 31 * result + getMonthValue();
-        result = 31 * result + getDayOfMonth();
-        return result;
+        return Objects.hash(year, month, day);
     }
 
     //-----------------------------------------------------------------------
