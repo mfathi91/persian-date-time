@@ -567,7 +567,7 @@ public final class PersianDate implements ChronoLocalDate {
     /**
      * Returns number of corresponding julian days. For number of juliand days of
      * PersianDate.of(1396, 8, 6) is 2458054. This method is provided in order to
-     * prevent creating unnecessary instances of {@codePersianDate} only to calculate
+     * prevent creating unnecessary instances of {@code PersianDate} only to calculate
      * julian day.
      *
      * @return number of corresponding julian days

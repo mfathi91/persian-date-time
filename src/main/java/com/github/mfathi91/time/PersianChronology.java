@@ -69,7 +69,6 @@ public final class PersianChronology extends AbstractChronology {
      * @param year      year that {@code dayOfYear} to be checked in, valid range is from
      *                  minimum year to maximum year
      * @param dayOfYear the day-of-year to be checked, from 1 to 365 or 366 in a leap year
-     * @return {@code dayOfYear}
      */
     void checkDayOfYear(int year, int dayOfYear) {
         checkValidValue(year, YEAR);

@@ -10,7 +10,7 @@
 
 This library is an implementation of [Solar Hijri calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar) (also known as Jalali calendar or Persian calendar). It is an immutable and thread-safe implementation of Persian calendar system, and can be used in multi-threaded programs.
 
-Since Java does not support Persian calendar, this library can be used in the applications that need Persian calendar system. Purpose of this library is to provide an immutable and easy API (that is similar to JDK 8 date and time API) for Persian calendar system. This class has been implemented the same as internal JDK calendars such as JapaneseDate.
+As Java does not support Persian calendar, this library can be used in the applications that need Persian calendar system. Purpose of this library is to provide an immutable and easy API (that is similar to JDK 8 date and time API) for Persian calendar system. This class has been implemented the same as internal JDK calendars such as JapaneseDate.
 
 ## Instructions
 
@@ -46,7 +46,7 @@ LocalDate gregDate2 = LocalDate.from(persianDate);  // => '2018-08-02'
 Converting other calendar system dates, such as Gregorian date would be like the following:
 ```java
 LocalDate gregDate = LocalDate.of(2015, 4, 17);
-PersianDate persianDate = PersianDate.ofGregorian(gregDate);    => '1394/01/28'
+PersianDate persianDate = PersianDate.ofGregorian(gregDate);  //  => '1394/01/28'
 ```
 The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](http://www.fourmilab.ch/documents/calendar/).
 
