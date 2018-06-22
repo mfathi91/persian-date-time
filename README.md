@@ -1,4 +1,4 @@
-![Omar Khayyam](http://uupload.ir/files/hbl_untitled.jpg)
+![Persian Date Time](https://user-images.githubusercontent.com/29010410/41397561-dc9a470a-6fc9-11e8-923a-112393900b0c.JPG)
 ----------------------------------------------------
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mfathi91/persian-date-time/badge.svg)](http://search.maven.org/#search|ga|1|com.github.mfathi91)
 [![Travis IC](https://travis-ci.org/mfathi91/persian-date-time.svg?branch=master)](https://travis-ci.org/mfathi91/persian-date-time)
@@ -20,7 +20,7 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>3.1.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ LocalDate gregDate2 = LocalDate.from(persianDate);  // => '2018-08-02'
 Converting other calendar system dates, such as Gregorian date would be like the following:
 ```java
 LocalDate gregDate = LocalDate.of(2015, 4, 17);
-PersianDate persianDate = PersianDate.ofGregorian(gregDate);  //  => '1394/01/28'
+PersianDate persianDate = PersianDate.fromGregorian(gregDate);  //  => '1394/01/28'
 ```
 The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](http://www.fourmilab.ch/documents/calendar/).
 
