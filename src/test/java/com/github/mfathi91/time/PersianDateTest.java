@@ -17,7 +17,7 @@ public class PersianDateTest {
 
     @Test
     public void testOnStaticFactoryMethodNow() {
-        assertReflectionEquals(PersianDate.ofGregorian(LocalDate.now()), PersianDate.now());
+        assertReflectionEquals(PersianDate.fromGregorian(LocalDate.now()), PersianDate.now());
     }
 
     @Test
@@ -442,42 +442,42 @@ public class PersianDateTest {
     public void testOnToPersian() {
         LocalDate ld = LocalDate.of(2046, 5, 10);
         PersianDate expected = PersianDate.of(1425, 2, 20);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ld));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ld));
     }
 
     @Test
     public void testOnToPersianInGregorianLeapYear() {
         LocalDate ldt = LocalDate.of(2012, 2, 29);
         PersianDate expected = PersianDate.of(1390, 12, 10);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianInPersianLeapYear() {
         LocalDate ldt = LocalDate.of(2034, 3, 20);
         PersianDate expected = PersianDate.of(1412, 12, 30);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2008, 1, 1);
         PersianDate expected = PersianDate.of(1386, 10, 11);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnEndOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2003, 3, 1);
         PersianDate expected = PersianDate.of(1381, 12, 10);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfPersianYear() {
         LocalDate ldt = LocalDate.of(1986, 3, 21);
         PersianDate expected = PersianDate.of(1365, 1, 1);
-        assertReflectionEquals(expected, PersianDate.ofGregorian(ldt));
+        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     //-----------------------------------------------------------------------

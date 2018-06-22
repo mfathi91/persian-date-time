@@ -157,7 +157,7 @@ public final class PersianDate implements ChronoLocalDate {
      * @param localDate Gregorian date and time, not null
      * @return an equivalent Persian date and time as an instance of {@link PersianDate}
      */
-    public static PersianDate ofGregorian(LocalDate localDate) {
+    public static PersianDate fromGregorian(LocalDate localDate) {
         Objects.requireNonNull(localDate, "localDate");
         return ofEpochDay(localDate.toEpochDay());
     }
