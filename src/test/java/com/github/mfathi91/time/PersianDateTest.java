@@ -11,13 +11,12 @@ import java.time.temporal.UnsupportedTemporalTypeException;
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.junit.Assert.*;
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 public class PersianDateTest {
 
     @Test
     public void testOnStaticFactoryMethodNow() {
-        assertReflectionEquals(PersianDate.fromGregorian(LocalDate.now()), PersianDate.now());
+        assertEquals(PersianDate.fromGregorian(LocalDate.now()), PersianDate.now());
     }
 
     @Test
@@ -93,16 +92,16 @@ public class PersianDateTest {
 
     @Test
     public void testOnOfJulianDay() {
-        assertReflectionEquals(PersianDate.of(1393, 11, 13), PersianDate.ofJulianDays(2457055));
-        assertReflectionEquals(PersianDate.of(1791, 6, 19), PersianDate.ofJulianDays(2602276));
-        assertReflectionEquals(PersianDate.of(320, 5, 5), PersianDate.ofJulianDays(2064960));
-        assertReflectionEquals(PersianDate.of(321, 12, 29), PersianDate.ofJulianDays(2065561));
-        assertReflectionEquals(PersianDate.of(473, 1, 1), PersianDate.ofJulianDays(2120714));
-        assertReflectionEquals(PersianDate.of(474, 1, 1), PersianDate.ofJulianDays(2121079));
-        assertReflectionEquals(PersianDate.of(474, 12, 30), PersianDate.ofJulianDays(2121444));
-        assertReflectionEquals(PersianDate.of(475, 1, 1), PersianDate.ofJulianDays(2121445));
-        assertReflectionEquals(PersianDate.MIN, PersianDate.ofJulianDays(1948320));
-        assertReflectionEquals(PersianDate.MAX, PersianDate.ofJulianDays(2678438));
+        assertEquals(PersianDate.of(1393, 11, 13), PersianDate.ofJulianDays(2457055));
+        assertEquals(PersianDate.of(1791, 6, 19), PersianDate.ofJulianDays(2602276));
+        assertEquals(PersianDate.of(320, 5, 5), PersianDate.ofJulianDays(2064960));
+        assertEquals(PersianDate.of(321, 12, 29), PersianDate.ofJulianDays(2065561));
+        assertEquals(PersianDate.of(473, 1, 1), PersianDate.ofJulianDays(2120714));
+        assertEquals(PersianDate.of(474, 1, 1), PersianDate.ofJulianDays(2121079));
+        assertEquals(PersianDate.of(474, 12, 30), PersianDate.ofJulianDays(2121444));
+        assertEquals(PersianDate.of(475, 1, 1), PersianDate.ofJulianDays(2121445));
+        assertEquals(PersianDate.MIN, PersianDate.ofJulianDays(1948320));
+        assertEquals(PersianDate.MAX, PersianDate.ofJulianDays(2678438));
     }
 
     //-----------------------------------------------------------------------
@@ -110,28 +109,28 @@ public class PersianDateTest {
     public void testOnPlusYears() {
         PersianDate actual = PersianDate.of(1400, 1, 1).plusYears(1);
         PersianDate expected = PersianDate.of(1401, 1, 1);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusYearsLeapYear() {
         PersianDate actual = PersianDate.of(1387, 12, 30).plusYears(1);
         PersianDate expected = PersianDate.of(1388, 12, 29);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusYearsLeapYear100Years() {
         PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(100);
         PersianDate expected = PersianDate.of(1603, 12, 29);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusYearsNegativeLeapYear104Years() {
         PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(-104);
         PersianDate expected = PersianDate.of(1399, 12, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     //-----------------------------------------------------------------------
@@ -144,63 +143,63 @@ public class PersianDateTest {
     public void testOnPlusMonths() {
         PersianDate actual = PersianDate.of(1388, 1, 1).plusMonths(1);
         PersianDate expected = PersianDate.of(1388, 2, 1);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthsMoreThan12Months() {
         PersianDate actual = PersianDate.of(1353, 10, 25).plusMonths(16);
         PersianDate expected = PersianDate.of(1355, 2, 25);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthShahrivarToMehr() {
         PersianDate actual = PersianDate.of(1400, 6, 31).plusMonths(1);
         PersianDate expected = PersianDate.of(1400, 7, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthEndOfMonthLeapYear() {
         PersianDate actual = PersianDate.of(1387, 3, 30).plusMonths(9);
         PersianDate expected = PersianDate.of(1387, 12, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthEndOfMonthNotLeapYear() {
         PersianDate actual = PersianDate.of(1396, 4, 30).plusMonths(8);
         PersianDate expected = PersianDate.of(1396, 12, 29);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthNegative() {
         PersianDate actual = PersianDate.of(1396, 6, 31).plusMonths(-8);
         PersianDate expected = PersianDate.of(1395, 10, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthNegativeMoreThan12Months() {
         PersianDate actual = PersianDate.of(1396, 7, 30).plusMonths(-30);
         PersianDate expected = PersianDate.of(1394, 1, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthNegativeEndOfYearLeapYear() {
         PersianDate actual = PersianDate.of(1388, 1, 31).plusMonths(-1);
         PersianDate expected = PersianDate.of(1387, 12, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusMonthNegativeEndOfYearNotLeapYear() {
         PersianDate actual = PersianDate.of(1389, 1, 31).plusMonths(-1);
         PersianDate expected = PersianDate.of(1388, 12, 29);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     //-----------------------------------------------------------------------
@@ -213,49 +212,49 @@ public class PersianDateTest {
     public void testOnPlusDays() {
         PersianDate actual = PersianDate.of(1450, 6, 31).plusDays(1);
         PersianDate expected = PersianDate.of(1450, 7, 1);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysMoreThan365Days() {
         PersianDate actual = PersianDate.of(1396, 8, 6).plusDays(24435);
         PersianDate expected = PersianDate.of(1463, 6, 31);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysEndOfYearLeapYear() {
         PersianDate actual = PersianDate.of(1387, 12, 29).plusDays(1);
         PersianDate expected = PersianDate.of(1387, 12, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysEndOfNotYearLeapYear() {
         PersianDate actual = PersianDate.of(1388, 12, 29).plusDays(1);
         PersianDate expected = PersianDate.of(1389, 1, 1);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysNegativeFirstOfYearLeapYear() {
         PersianDate actual = PersianDate.of(1392, 1, 1).plusDays(-1);
         PersianDate expected = PersianDate.of(1391, 12, 30);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysNegativeFirstOfYearNotLeapYear() {
         PersianDate actual = PersianDate.of(1393, 1, 1).plusDays(-1);
         PersianDate expected = PersianDate.of(1392, 12, 29);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnPlusDaysNegativeMoreThan365Days() {
         PersianDate actual = PersianDate.of(1396, 8, 6).plusDays(-35688);
         PersianDate expected = PersianDate.of(1298, 11, 22);
-        assertReflectionEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     //-----------------------------------------------------------------------
@@ -380,61 +379,61 @@ public class PersianDateTest {
     public void testOnToGregorian() {
         PersianDate pdt = PersianDate.of(1396, 6, 20);
         LocalDate expected = LocalDate.of(2017, 9, 11);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianMinPersianDate() {
         LocalDate expected = LocalDate.of(622, 3, 22);
-        assertReflectionEquals(expected, PersianDate.MIN.toGregorian());
+        assertEquals(expected, PersianDate.MIN.toGregorian());
     }
 
     @Test
     public void testOnToGregorianMaxPersianDate() {
         LocalDate expected = LocalDate.of(2621, 3, 20);
-        assertReflectionEquals(expected, PersianDate.MAX.toGregorian());
+        assertEquals(expected, PersianDate.MAX.toGregorian());
     }
 
     @Test
     public void testOnToGregorianInPersianLeapYear() {
         PersianDate pdt = PersianDate.of(1399, 12, 30);
         LocalDate expected = LocalDate.of(2021, 3, 20);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianInGregorianLeapYear() {
         PersianDate pdt = PersianDate.of(1394, 12, 10);
         LocalDate expected = LocalDate.of(2016, 2, 29);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianOnFirstOfPersianYear() {
         PersianDate pdt = PersianDate.of(1407, 1, 1);
         LocalDate expected = LocalDate.of(2028, 3, 20);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianOnEndOfPersianYear() {
         PersianDate pdt = PersianDate.of(1376, 12, 29);
         LocalDate expected = LocalDate.of(1998, 3, 20);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianOnFirstOfGregorianYear() {
         PersianDate pdt = PersianDate.of(1385, 10, 11);
         LocalDate expected = LocalDate.of(2007, 1, 1);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     @Test
     public void testOnToGregorianOnEndOfGregorianYear() {
         PersianDate pdt = PersianDate.of(1429, 10, 10);
         LocalDate expected = LocalDate.of(2050, 12, 31);
-        assertReflectionEquals(expected, pdt.toGregorian());
+        assertEquals(expected, pdt.toGregorian());
     }
 
     //-----------------------------------------------------------------------
@@ -442,42 +441,42 @@ public class PersianDateTest {
     public void testOnToPersian() {
         LocalDate ld = LocalDate.of(2046, 5, 10);
         PersianDate expected = PersianDate.of(1425, 2, 20);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ld));
+        assertEquals(expected, PersianDate.fromGregorian(ld));
     }
 
     @Test
     public void testOnToPersianInGregorianLeapYear() {
         LocalDate ldt = LocalDate.of(2012, 2, 29);
         PersianDate expected = PersianDate.of(1390, 12, 10);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
+        assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianInPersianLeapYear() {
         LocalDate ldt = LocalDate.of(2034, 3, 20);
         PersianDate expected = PersianDate.of(1412, 12, 30);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
+        assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2008, 1, 1);
         PersianDate expected = PersianDate.of(1386, 10, 11);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
+        assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnEndOfGregorianYear() {
         LocalDate ldt = LocalDate.of(2003, 3, 1);
         PersianDate expected = PersianDate.of(1381, 12, 10);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
+        assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     @Test
     public void testOnToPersianOnFirstOfPersianYear() {
         LocalDate ldt = LocalDate.of(1986, 3, 21);
         PersianDate expected = PersianDate.of(1365, 1, 1);
-        assertReflectionEquals(expected, PersianDate.fromGregorian(ldt));
+        assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
 
     //-----------------------------------------------------------------------
@@ -514,21 +513,21 @@ public class PersianDateTest {
     @Test
     public void testOnEqualsNull() {
         PersianDate a = PersianDate.of(1396, 3, 15);
-        assertFalse(a.equals(null));
+        assertNotEquals(null, a);
     }
 
     @Test
     public void testOnEqualsReflexivity() {
         PersianDate a = PersianDate.of(1396, 3, 15);
-        assertTrue(a.equals(a));
+        assertEquals(a, a);
     }
 
     @Test
     public void testOnEqualsSymmetricity() {
         PersianDate a = PersianDate.of(1396, 3, 15);
         PersianDate b = PersianDate.of(1396, 3, 15);
-        assertTrue(a.equals(b));
-        assertTrue(b.equals(a));
+        assertEquals(a, b);
+        assertEquals(b, a);
     }
 
     @Test
@@ -536,16 +535,16 @@ public class PersianDateTest {
         PersianDate a = PersianDate.of(1396, 3, 15);
         PersianDate b = PersianDate.of(1396, 3, 15);
         PersianDate c = PersianDate.of(1396, 3, 15);
-        assertTrue(a.equals(b));
-        assertTrue(b.equals(c));
-        assertTrue(a.equals(c));
+        assertEquals(a, b);
+        assertEquals(b, c);
+        assertEquals(a, c);
     }
 
     @Test
     public void testOnHashCodeForEqualObjects() {
         PersianDate a = PersianDate.of(1500, 12, 15);
         PersianDate b = PersianDate.of(1500, 12, 15);
-        assertTrue(a.equals(b));
+        assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
