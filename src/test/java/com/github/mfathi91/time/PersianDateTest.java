@@ -9,6 +9,8 @@ import java.time.chrono.ChronoPeriod;
 import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
@@ -258,10 +260,17 @@ public class PersianDateTest {
     //-----------------------------------------------------------------------
     @Test
     public void testOnIsLeapYear() {
+        // Test on leap years
         List<Integer> leapYears = Arrays.asList(1375, 1379, 1383, 1387, 1391, 1395, 1399, 1403,
                 1408, 1412, 1416, 1420, 1424, 1428, 1432, 1437);
         for (final int leapYear : leapYears) {
             assertTrue(PersianDate.isLeapYear(leapYear));
+        }
+        // Test on non-leap years
+        List<Integer> nonLeapYears = IntStream.range(1375, 1437).boxed().collect(Collectors.toList());
+        nonLeapYears.removeAll(leapYears);
+        for (final int nonLeapYear : nonLeapYears) {
+            assertFalse(PersianDate.isLeapYear(nonLeapYear));
         }
     }
 
@@ -372,9 +381,29 @@ public class PersianDateTest {
     //-----------------------------------------------------------------------
     @Test
     public void testOnToGregorian() {
-        PersianDate pdt = PersianDate.of(1396, 6, 20);
-        LocalDate expected = LocalDate.of(2017, 9, 11);
-        assertEquals(expected, pdt.toGregorian());
+        assertEquals(LocalDate.of(2017, 9, 11), PersianDate.of(1396, 6, 20).toGregorian());
+        assertEquals(LocalDate.of(1997, 3, 20), PersianDate.of(1375, 12, 30).toGregorian());
+        assertEquals(LocalDate.of(1996, 5, 19), PersianDate.of(1375, 2, 30).toGregorian());
+        assertEquals(LocalDate.of(1997, 3, 21), PersianDate.of(1376, 1, 1).toGregorian());
+        assertEquals(LocalDate.of(1998, 3, 20), PersianDate.of(1376, 12, 29).toGregorian());
+        assertEquals(LocalDate.of(2020, 2, 29), PersianDate.of(1398, 12, 10).toGregorian());
+        assertEquals(LocalDate.of(2020, 3, 1), PersianDate.of(1398, 12, 11).toGregorian());
+        assertEquals(LocalDate.of(2020, 3, 19), PersianDate.of(1398, 12, 29).toGregorian());
+        assertEquals(LocalDate.of(2021, 3, 19), PersianDate.of(1399, 12, 29).toGregorian());
+        assertEquals(LocalDate.of(2021, 3, 20), PersianDate.of(1399, 12, 30).toGregorian());
+        assertEquals(LocalDate.of(2021, 3, 21), PersianDate.of(1400, 1, 1).toGregorian());
+        assertEquals(LocalDate.of(2021, 2, 27), PersianDate.of(1399, 12, 9).toGregorian());
+        assertEquals(LocalDate.of(2021, 2, 28), PersianDate.of(1399, 12, 10).toGregorian());
+        assertEquals(LocalDate.of(2021, 3, 1), PersianDate.of(1399, 12, 11).toGregorian());
+        assertEquals(LocalDate.of(2021, 5, 18), PersianDate.of(1400, 2, 28).toGregorian());
+        assertEquals(LocalDate.of(2021, 5, 19), PersianDate.of(1400, 2, 29).toGregorian());
+        assertEquals(LocalDate.of(2021, 5, 20), PersianDate.of(1400, 2, 30).toGregorian());
+        assertEquals(LocalDate.of(2030, 3, 21), PersianDate.of(1409, 1, 1).toGregorian());
+        assertEquals(LocalDate.of(2031, 2, 27), PersianDate.of(1409, 12, 8).toGregorian());
+        assertEquals(LocalDate.of(2031, 2, 28), PersianDate.of(1409, 12, 9).toGregorian());
+        assertEquals(LocalDate.of(2031, 3, 1), PersianDate.of(1409, 12, 10).toGregorian());
+        assertEquals(LocalDate.of(2031, 3, 20), PersianDate.of(1409, 12, 29).toGregorian());
+        assertEquals(LocalDate.of(2031, 3, 21), PersianDate.of(1410, 1, 1).toGregorian());
     }
 
     @Test
@@ -433,10 +462,32 @@ public class PersianDateTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testOnToPersian() {
-        LocalDate ld = LocalDate.of(2046, 5, 10);
-        PersianDate expected = PersianDate.of(1425, 2, 20);
-        assertEquals(expected, PersianDate.fromGregorian(ld));
+    public void testFromGregorian() {
+        assertEquals(PersianDate.of(1425, 2, 20), PersianDate.fromGregorian(LocalDate.of(2046, 5, 10)));
+        assertEquals(PersianDate.of(1396, 6, 20), PersianDate.fromGregorian(LocalDate.of(2017, 9, 11)));
+        assertEquals(PersianDate.of(1375, 12, 30), PersianDate.fromGregorian(LocalDate.of(1997, 3, 20)));
+        assertEquals(PersianDate.of(1375, 2, 30), PersianDate.fromGregorian(LocalDate.of(1996, 5, 19)));
+        assertEquals(PersianDate.of(1375, 2, 30), PersianDate.fromGregorian(LocalDate.of(1996, 5, 19)));
+        assertEquals(PersianDate.of(1376, 1, 1), PersianDate.fromGregorian(LocalDate.of(1997, 3, 21)));
+        assertEquals(PersianDate.of(1376, 12, 29), PersianDate.fromGregorian(LocalDate.of(1998, 3, 20)));
+        assertEquals(PersianDate.of(1398, 12, 10), PersianDate.fromGregorian(LocalDate.of(2020, 2, 29)));
+        assertEquals(PersianDate.of(1398, 12, 11), PersianDate.fromGregorian(LocalDate.of(2020, 3, 1)));
+        assertEquals(PersianDate.of(1398, 12, 29), PersianDate.fromGregorian(LocalDate.of(2020, 3, 19)));
+        assertEquals(PersianDate.of(1399, 12, 29), PersianDate.fromGregorian(LocalDate.of(2021, 3, 19)));
+        assertEquals(PersianDate.of(1399, 12, 30), PersianDate.fromGregorian(LocalDate.of(2021, 3, 20)));
+        assertEquals(PersianDate.of(1400, 1, 1), PersianDate.fromGregorian(LocalDate.of(2021, 3, 21)));
+        assertEquals(PersianDate.of(1399, 12, 9), PersianDate.fromGregorian(LocalDate.of(2021, 2, 27)));
+        assertEquals(PersianDate.of(1399, 12, 10), PersianDate.fromGregorian(LocalDate.of(2021, 2, 28)));
+        assertEquals(PersianDate.of(1399, 12, 11), PersianDate.fromGregorian(LocalDate.of(2021, 3, 1)));
+        assertEquals(PersianDate.of(1400, 2, 28), PersianDate.fromGregorian(LocalDate.of(2021, 5, 18)));
+        assertEquals(PersianDate.of(1400, 2, 29), PersianDate.fromGregorian(LocalDate.of(2021, 5, 19)));
+        assertEquals(PersianDate.of(1400, 2, 30), PersianDate.fromGregorian(LocalDate.of(2021, 5, 20)));
+        assertEquals(PersianDate.of(1409, 1, 1), PersianDate.fromGregorian(LocalDate.of(2030, 3, 21)));
+        assertEquals(PersianDate.of(1409, 12, 8), PersianDate.fromGregorian(LocalDate.of(2031, 2, 27)));
+        assertEquals(PersianDate.of(1409, 12, 9), PersianDate.fromGregorian(LocalDate.of(2031, 2, 28)));
+        assertEquals(PersianDate.of(1409, 12, 10), PersianDate.fromGregorian(LocalDate.of(2031, 3, 1)));
+        assertEquals(PersianDate.of(1409, 12, 29), PersianDate.fromGregorian(LocalDate.of(2031, 3, 20)));
+        assertEquals(PersianDate.of(1410, 1, 1), PersianDate.fromGregorian(LocalDate.of(2031, 3, 21)));
     }
 
     @Test
