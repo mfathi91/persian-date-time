@@ -19,43 +19,52 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>4.0.3</version>
+  <version>4.1.0</version>
 </dependency>
 ```
 
 ### Usage
-One can get an instance of _PersianDate_ for the present date:
+To get the current Persian date:
 ```java
 PersianDate today = PersianDate.now();
 ```
-
-To get an instance of PersianDate for a desired date:
+To get a desired Persian date:
 ```java
 PersianDate persianDate1 = PersianDate.of(1396, 7, 15);
 PersianDate persianDate2 = PersianDate.of(1396, PersianMonth.MEHR, 15);
 ```
-
-It is possible to easily convert Persian date to other calendar systems dates, such as Gregorian date:
+To parse Persian date from a string:
+```java
+PersianDate persianDate1 = PersianDate.parse("1400-06-15");    // From standard format
+PersianDate persianDate1 = PersianDate.parse("1400/06/15", DateTimeFormatter.ofPattern("yyyy/MM/dd"));    // From a desired format
+```
+To convert Persian date to Gregorian date:
 ```java
 PersianDate persianDate = PersianDate.of(1397, 5, 11);
 LocalDate gregDate1 = persianDate.toGregorian();    // => '2018-08-02'
-// another possible approach to convert
-LocalDate gregDate2 = LocalDate.from(persianDate);  // => '2018-08-02'
 ```
-Converting other calendar system dates, such as Gregorian date would be like the following:
+To convert from Gregorian date to Persian date:
 ```java
 LocalDate gregDate = LocalDate.of(2015, 4, 17);
 PersianDate persianDate = PersianDate.fromGregorian(gregDate);  //  => '1394/01/28'
 ```
-The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](http://www.fourmilab.ch/documents/calendar/).
-
-It is possible to format an instance of PersianDate using _DateTimeFormatter_ class:
+Conversion between Persian date and any other JDK supported calendar, such as _HijrahDate_:
+```java
+// Convert to Persian date
+PersianDate persianDate = PersianDate.from(hijrahDate);
+// Convert from Persian date
+HijrahDate hijrahDate = HijrahDate.from(persianDate);
+```
+To format a Persian date based on a _DateTimeFormatter_ class:
 ```java
 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 dtf.format(PersianDate.now());    // => e.g. '1396/05/10'
 // another possible approach to format
 PersianDate.now().format(dtf);    // => e.g. '1396/05/10'
 ```
+The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](https://github.com/soroush/libcalendars).
+
+
 
 ### Requirements
 This version of Persian Date Time requires:
