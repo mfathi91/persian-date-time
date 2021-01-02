@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static java.time.temporal.ChronoField.EPOCH_DAY;
 import static java.time.temporal.ChronoField.YEAR;
 
 /**
@@ -82,9 +81,6 @@ public final class PersianChronology extends AbstractChronology {
 
     /**
      * Gets the ID of the chronology.
-     * <p>
-     * The ID uniquely identifies the {@code Chronology}. It can be used to
-     * lookup the {@code Chronology} using {@link #of(String)}.
      *
      * @return the chronology ID, non-null
      * @see #getCalendarType()
@@ -95,11 +91,7 @@ public final class PersianChronology extends AbstractChronology {
     }
 
     /**
-     * Gets the calendar type of the Islamic calendar.
-     * <p>
-     * The calendar type is an identifier defined by the
-     * <em>Unicode Locale Data Markup Language (LDML)</em> specification.
-     * It can be used to lookup the {@code Chronology} using {@link #of(String)}.
+     * Gets the calendar type of the Persian calendar.
      *
      * @return the calendar system type; non-null if the calendar has
      * a standard type, otherwise null
@@ -178,7 +170,7 @@ public final class PersianChronology extends AbstractChronology {
         if (temporal instanceof PersianDate) {
             return (PersianDate) temporal;
         }
-        return PersianDate.ofEpochDay(temporal.getLong(EPOCH_DAY));
+        return PersianDate.ofJulianDays(JulianFields.JULIAN_DAY.getFrom(temporal));
     }
 
     /**
@@ -191,8 +183,7 @@ public final class PersianChronology extends AbstractChronology {
     @Override
     public boolean isLeapYear(long year) {
         checkValidValue(year, YEAR);
-        return PersianDate.toJulianDay((int) (year + 1), 1, 1) -
-                PersianDate.toJulianDay((int) year, 1, 1) > 365;
+        return PersianDate.isLeapYear((int) year);
     }
 
     /**

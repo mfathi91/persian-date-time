@@ -7,6 +7,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.chrono.ChronoPeriod;
 import java.time.temporal.UnsupportedTemporalTypeException;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
@@ -85,23 +87,19 @@ public class PersianDateTest {
     //-----------------------------------------------------------------------
     @Test
     public void testOnToJulianDay() {
-        assertEquals(2458054, PersianDate.of(1396, 8, 6).toJulianDay());
-        assertEquals(2462580, PersianDate.of(1408, 12, 30).toJulianDay());
-        assertEquals(1984844, PersianDate.of(101, 1, 1).toJulianDay());
+        assertEquals(2458055, PersianDate.of(1396, 8, 6).toJulianDay());
+        assertEquals(2462581, PersianDate.of(1408, 12, 30).toJulianDay());
     }
 
     @Test
     public void testOnOfJulianDay() {
-        assertEquals(PersianDate.of(1393, 11, 13), PersianDate.ofJulianDays(2457055));
-        assertEquals(PersianDate.of(1791, 6, 19), PersianDate.ofJulianDays(2602276));
-        assertEquals(PersianDate.of(320, 5, 5), PersianDate.ofJulianDays(2064960));
-        assertEquals(PersianDate.of(321, 12, 29), PersianDate.ofJulianDays(2065561));
-        assertEquals(PersianDate.of(473, 1, 1), PersianDate.ofJulianDays(2120714));
-        assertEquals(PersianDate.of(474, 1, 1), PersianDate.ofJulianDays(2121079));
-        assertEquals(PersianDate.of(474, 12, 30), PersianDate.ofJulianDays(2121444));
-        assertEquals(PersianDate.of(475, 1, 1), PersianDate.ofJulianDays(2121445));
-        assertEquals(PersianDate.MIN, PersianDate.ofJulianDays(1948320));
-        assertEquals(PersianDate.MAX, PersianDate.ofJulianDays(2678438));
+        assertEquals(PersianDate.of(1393, 11, 13), PersianDate.ofJulianDays(2457056));
+        assertEquals(PersianDate.of(1499, 6, 19), PersianDate.ofJulianDays(2495627));
+        assertEquals(PersianDate.of(320, 5, 5), PersianDate.ofJulianDays(2064961));
+        assertEquals(PersianDate.of(321, 12, 29), PersianDate.ofJulianDays(2065562));
+        assertEquals(PersianDate.of(473, 1, 1), PersianDate.ofJulianDays(2120715));
+        assertEquals(PersianDate.of(474, 1, 1), PersianDate.ofJulianDays(2121080));
+        assertEquals(PersianDate.MAX, PersianDate.ofJulianDays(2678439));
     }
 
     //-----------------------------------------------------------------------
@@ -260,14 +258,11 @@ public class PersianDateTest {
     //-----------------------------------------------------------------------
     @Test
     public void testOnIsLeapYear() {
-        PersianDate pd = PersianDate.of(1375, 6, 15);
-        // 7 successive leap years
-        for (int i = 0; i < 7; i++) {
-            assertTrue(pd.isLeapYear());
-            pd = pd.plusYears(4);
+        List<Integer> leapYears = Arrays.asList(1375, 1379, 1383, 1387, 1391, 1395, 1399, 1403,
+                1408, 1412, 1416, 1420, 1424, 1428, 1432, 1437);
+        for (final int leapYear : leapYears) {
+            assertTrue(PersianDate.isLeapYear(leapYear));
         }
-        // each 33 years, leap year happens after 5 years
-        assertTrue(pd.plusYears(1).isLeapYear());
     }
 
     //-----------------------------------------------------------------------

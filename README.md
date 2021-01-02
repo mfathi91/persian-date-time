@@ -20,7 +20,7 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.3</version>
 </dependency>
 ```
 

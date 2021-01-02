@@ -44,9 +44,34 @@ public final class PersianDate implements ChronoLocalDate {
             PersianDate.of((int) PersianChronology.INSTANCE.range(YEAR).getMaximum(), 12, 29);
 
     /**
-     * 1970-01-01 to julidan day.
+     * 1970-01-01 to julian day.
      */
-    private static final long JULIAN_DAY_TO_1970 = 2440587L;
+    private static final long JULIAN_DAY_TO_1970 = 2440588L;
+
+    /**
+     * Constant for cycle of of days.
+     */
+    private static final long CYCLE_DAYS = 1029983;
+
+    /**
+     * Constant for cycle of years.
+     */
+    private static final int CYCLE_YEARS = 2820;
+
+    /**
+     * Constant for length of year.
+     */
+    private static final double YEAR_LENGTH = 365.24219858156028368;
+
+    /**
+     * Constant for Persian epoch date.
+     */
+    private static final long PERSIAN_DATE_EPOCH = 2121446;
+
+    /**
+     * Constant for leap year threshold.
+     */
+    private static final double LEAP_THRESHOLD = 0.24219858156028368;
 
     /**
      * The year.
@@ -108,7 +133,8 @@ public final class PersianDate implements ChronoLocalDate {
      * @return day-of-week, which is an enum {@link DayOfWeek}
      */
     public DayOfWeek getDayOfWeek() {
-        return DayOfWeek.of((int) (((toJulianDay() + 1) % 7) + 1));
+        int dow0 = Math.floorMod((int) toEpochDay() + 3, 7);
+        return DayOfWeek.of(dow0 + 1);
     }
 
     /**
@@ -117,7 +143,7 @@ public final class PersianDate implements ChronoLocalDate {
      * @return current Persian date from the system clock in the default time zone
      */
     public static PersianDate now() {
-        return ofEpochDay(LocalDate.now().toEpochDay());
+        return ofJulianDays(JulianFields.JULIAN_DAY.getFrom(LocalDate.now()));
     }
 
     /**
@@ -126,8 +152,8 @@ public final class PersianDate implements ChronoLocalDate {
      * be {@link PersianMonth#FARVARDIN} and value {@code 12} represents
      * {@link PersianMonth#ESFAND}.
      *
-     * @param year       the year to represent, from 1 to MAX_YEAR
-     * @param month      the value of month, from 1 to 12
+     * @param year the year to represent, from 1 to MAX_YEAR
+     * @param month the value of month, from 1 to 12
      * @param dayOfMonth the dayOfMonth to represent, from 1 to 31
      * @return an instance of {@code PersianDate}
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
@@ -139,8 +165,8 @@ public final class PersianDate implements ChronoLocalDate {
     /**
      * Obtains an instance of {@code PersianDate} with year, month and day of month.
      *
-     * @param year       the year to represent, from 1 to MAX_YEAR
-     * @param month      the month-of-year to represent, an instance of {@link PersianMonth}
+     * @param year the year to represent, from 1 to MAX_YEAR
+     * @param month the month-of-year to represent, an instance of {@link PersianMonth}
      * @param dayOfMonth the dayOfMonth to represent, from 1 to 31
      * @return an instance of {@code PersianDate}
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
@@ -159,7 +185,7 @@ public final class PersianDate implements ChronoLocalDate {
      */
     public static PersianDate fromGregorian(LocalDate localDate) {
         Objects.requireNonNull(localDate, "localDate");
-        return ofEpochDay(localDate.toEpochDay());
+        return ofJulianDays(JulianFields.JULIAN_DAY.getFrom(localDate));
     }
 
     /**
@@ -176,41 +202,47 @@ public final class PersianDate implements ChronoLocalDate {
 
     /**
      * Returns an instance of {@link PersianDate}, based on number of julian days.
-     * For example passing {@code 2458054} as the parameter will cause to get a
+     * For example passing {@code 2458055} as the parameter will cause to get a
      * Persian date of "1396-8-6".
      *
      * @param julianDays julian days
      * @return an instance of {@link PersianDate}
-     * @see <a href="http://www.fourmilab.ch/documents/calendar/">calendar convertor</a>
+     * @see <a href="https://github.com/soroush/libcalendars">libcalendars</a>
      */
     public static PersianDate ofJulianDays(long julianDays) {
-        MyUtils.longRequirePositive(julianDays, "julianDays");
-        long depoch = julianDays - 2121445L;
-        long cycle = depoch / 1029983L;
-        long cyear = depoch % 1029983L;
-        long ycycle, aux1, aux2;
-        if (cyear == 1029982L) {
-            ycycle = 2820L;
-        } else {
-            aux1 = cyear / 366L;
-            aux2 = cyear % 366L;
-            ycycle = (((2134L * aux1) + (2816L * aux2) + 2815L) / (1028522L)) + aux1;
-            ycycle = (ycycle >= 0) ? ycycle + 1L : ycycle;
+        final long offset = julianDays - PERSIAN_DATE_EPOCH;
+        long cycle_no = offset / CYCLE_DAYS;
+        if (offset < 0) {
+            --cycle_no;
         }
-        // Check year '474'
-        ycycle = !MyUtils.isBetween(julianDays, 2121079, 2121444) ? ycycle : 0;
-        long pYear = ycycle + (2820L * cycle) + 474L;
-        int yday = (int) (julianDays - PersianDate.of((int) pYear, 1, 1).toJulianDay() + 1);
-        int pMonth = (int) Math.ceil((yday <= 186) ? yday / 31.0 : (yday - 6) / 30.0);
-        int pDay = (int) (julianDays - PersianDate.of((int) pYear, pMonth, 1).toJulianDay() + 1);
-        return PersianDate.of((int) pYear, pMonth, pDay);
+        final long cycleStart = PERSIAN_DATE_EPOCH + cycle_no * CYCLE_DAYS;
+        final int yc = (int) (Math.floor((julianDays - cycleStart) / YEAR_LENGTH));
+        long year = yc + 475 + cycle_no * 2820;
+        final long lll = PERSIAN_DATE_EPOCH + cycle_no * CYCLE_DAYS + (long) Math.floor((yc * YEAR_LENGTH));
+        long day = julianDays - lll + 1;
+        if (day > (isLeapYear((int) year) ? 366 : 365)) {
+            year++;
+            day = 1;
+        }
+        if (year <= 0) {
+            year--;
+        }
+        int month;
+        for (month = 1; month < 12; ++month) {
+            if (day > PersianMonth.of(month).length(isLeapYear((int) year))){
+                day -= PersianMonth.of(month).length(isLeapYear((int) year));
+            } else {
+                break;
+            }
+        }
+        return PersianDate.of((int) year, month, (int) day);
     }
 
     /**
      * Constructor.
      *
-     * @param year       the year to represent, from 1 to MAX_YEAR
-     * @param month      the month-of-year to represent, not null, from {@link PersianMonth} enum
+     * @param year the year to represent, from 1 to MAX_YEAR
+     * @param month the month-of-year to represent, not null, from {@link PersianMonth} enum
      * @param dayOfMonth the dayOfMonth-of-month to represent, from 1 to 31
      * @throws DateTimeException if the passed parameters do not form a valid date or time.
      */
@@ -298,7 +330,7 @@ public final class PersianDate implements ChronoLocalDate {
      * This instance is immutable and unaffected by this method call.
      *
      * @param endExclusive the end date, exclusive, which is converted to a {@code PersianDate}, not null
-     * @param unit         the unit to measure the amount in, not null
+     * @param unit the unit to measure the amount in, not null
      * @return the amount of time between this date and the end date
      * @throws DateTimeException                if the amount cannot be calculated, or the end
      *                                          temporal cannot be converted to a {@code PersianDate}
@@ -312,14 +344,22 @@ public final class PersianDate implements ChronoLocalDate {
         PersianDate end = (PersianDate) getChronology().date(endExclusive);
         if (unit instanceof ChronoUnit) {
             switch ((ChronoUnit) unit) {
-                case DAYS: return daysUntil(end);
-                case WEEKS: return daysUntil(end) / 7;
-                case MONTHS: return monthsUntil(end);
-                case YEARS: return monthsUntil(end) / 12;
-                case DECADES: return monthsUntil(end) / 120;
-                case CENTURIES: return monthsUntil(end) / 1200;
-                case MILLENNIA: return monthsUntil(end) / 12000;
-                case ERAS: return end.getLong(ERA) - getLong(ERA);
+                case DAYS:
+                    return daysUntil(end);
+                case WEEKS:
+                    return daysUntil(end) / 7;
+                case MONTHS:
+                    return monthsUntil(end);
+                case YEARS:
+                    return monthsUntil(end) / 12;
+                case DECADES:
+                    return monthsUntil(end) / 120;
+                case CENTURIES:
+                    return monthsUntil(end) / 1200;
+                case MILLENNIA:
+                    return monthsUntil(end) / 12000;
+                case ERAS:
+                    return end.getLong(ERA) - getLong(ERA);
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -414,19 +454,32 @@ public final class PersianDate implements ChronoLocalDate {
     public long getLong(TemporalField field) {
         if (field instanceof ChronoField) {
             switch ((ChronoField) field) {
-                case DAY_OF_WEEK: return getDayOfWeek().getValue();
-                case ALIGNED_DAY_OF_WEEK_IN_MONTH: return ((day - 1) % 7) + 1;
-                case ALIGNED_DAY_OF_WEEK_IN_YEAR: return ((getDayOfYear() - 1) % 7) + 1;
-                case DAY_OF_MONTH: return this.day;
-                case DAY_OF_YEAR: return this.getDayOfYear();
-                case EPOCH_DAY: return this.toEpochDay();
-                case ALIGNED_WEEK_OF_MONTH: return ((day - 1) / 7) + 1;
-                case ALIGNED_WEEK_OF_YEAR: return ((getDayOfYear() - 1) / 7) + 1;
-                case MONTH_OF_YEAR: return month;
-                case PROLEPTIC_MONTH: return (year * 12L + month - 1);
-                case YEAR_OF_ERA: return (year >= 1 ? year : 1 - year);
-                case YEAR: return year;
-                case ERA: return (year >= 1 ? 1 : 0);
+                case DAY_OF_WEEK:
+                    return getDayOfWeek().getValue();
+                case ALIGNED_DAY_OF_WEEK_IN_MONTH:
+                    return ((day - 1) % 7) + 1;
+                case ALIGNED_DAY_OF_WEEK_IN_YEAR:
+                    return ((getDayOfYear() - 1) % 7) + 1;
+                case DAY_OF_MONTH:
+                    return this.day;
+                case DAY_OF_YEAR:
+                    return this.getDayOfYear();
+                case EPOCH_DAY:
+                    return this.toEpochDay();
+                case ALIGNED_WEEK_OF_MONTH:
+                    return ((day - 1) / 7) + 1;
+                case ALIGNED_WEEK_OF_YEAR:
+                    return ((getDayOfYear() - 1) / 7) + 1;
+                case MONTH_OF_YEAR:
+                    return month;
+                case PROLEPTIC_MONTH:
+                    return (year * 12L + month - 1);
+                case YEAR_OF_ERA:
+                    return (year >= 1 ? year : 1 - year);
+                case YEAR:
+                    return year;
+                case ERA:
+                    return (year >= 1 ? 1 : 0);
             }
         }
         throw new UnsupportedTemporalTypeException("Unsupported field: " + field);
@@ -516,15 +569,26 @@ public final class PersianDate implements ChronoLocalDate {
      */
     @Override
     public boolean isLeapYear() {
-        return PersianChronology.INSTANCE.isLeapYear(year);
+        return isLeapYear(year);
+    }
+
+    /**
+     * Returns {@code true} if the given year is a leap year in Persian calendar.
+     *
+     * @param year the year to be checked
+     * @return {@code true} if the given year is a leap year in Persian calendar.
+     */
+    public static boolean isLeapYear(final int year) {
+        MyUtils.intRequirePositive(year, "year");
+        return ((year + 2346) * LEAP_THRESHOLD % 1) < LEAP_THRESHOLD;
     }
 
     /**
      * Resolves the date, resolving days past the end of month.
      *
-     * @param year  the year to represent
+     * @param year the year to represent
      * @param month the month-of-year to represent, validated from 1 to 12
-     * @param day   the day-of-month to represent, validated from 1 to 31
+     * @param day the day-of-month to represent, validated from 1 to 31
      * @return the resolved date, not null
      */
     private PersianDate resolvePreviousValid(int year, int month, int day) {
@@ -574,13 +638,14 @@ public final class PersianDate implements ChronoLocalDate {
      * @see <a href="http://www.fourmilab.ch/documents/calendar/">calendar convertor</a>
      */
     static long toJulianDay(int year, int month, int dayOfMonth) {
-        int epbase = year - 474;
-        int epyear = 474 + (epbase % 2820);
-        return dayOfMonth + PersianMonth.of(month).daysToFirstOfMonth() +
-                (epyear * 682 - 110) / 2816 +
-                (epyear - 1) * 365 +
-                (epbase / 2820 * 1029983) +
-                (1948320 - 1);
+
+        long era = (year - 475) / CYCLE_YEARS;
+        if ((year - 475) < 0) {
+            era--;
+        }
+        final long y_c = (year - 475) - era * CYCLE_YEARS;
+        final long f_d = PERSIAN_DATE_EPOCH + era * CYCLE_DAYS + (long) Math.floor((y_c * YEAR_LENGTH));
+        return f_d + PersianMonth.of(month).daysToFirstOfMonth() + dayOfMonth - 1;
     }
     //-----------------------------------------------------------------------
 
