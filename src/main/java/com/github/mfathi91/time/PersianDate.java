@@ -6,6 +6,7 @@ import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoPeriod;
 import java.time.chrono.Chronology;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.*;
 import java.util.Objects;
 
@@ -186,6 +187,41 @@ public final class PersianDate implements ChronoLocalDate {
     public static PersianDate fromGregorian(LocalDate localDate) {
         Objects.requireNonNull(localDate, "localDate");
         return ofJulianDays(JulianFields.JULIAN_DAY.getFrom(localDate));
+    }
+
+    /**
+     * Obtains an instance of {@code PersianDate} from a text, assuming its format is {@code yyyy-MM-dd}.
+     * For example the given text could be {@code 1399-10-12}, otherwise an exception will be thrown.
+     *
+     * @param text the text to parse, not {@code null}
+     * @return an instance of {@code PersianDate} from the given text
+     */
+    public static PersianDate parse(final CharSequence text) {
+        return parse(text, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    /**
+     * Obtains an instance of {@code PersianDate} from a text string using a specific formatter.
+     *
+     * @param text the text to parse, not {@code null}
+     * @param formatter the formatter to use, not {@code null}
+     * @return an instance of {@code PersianDate} from the given text
+     */
+    public static PersianDate parse(final CharSequence text, final DateTimeFormatter formatter) {
+        Objects.requireNonNull(formatter, "formatter");
+        return formatter.withChronology(PersianChronology.INSTANCE).parse(text, PersianDate::from);
+    }
+
+    /**
+     * Obtains an instance of {@code PersianDate} from a temporal object.
+     *
+     * @param temporal  the temporal object to convert, not {@code null}
+     * @return the local date, not {@code null}
+     * @throws DateTimeException if unable to convert to a {@code PersianDate}
+     */
+    public static PersianDate from(final TemporalAccessor temporal) {
+        Objects.requireNonNull(temporal, "temporal");
+        return PersianChronology.INSTANCE.date(temporal);
     }
 
     /**

@@ -6,6 +6,7 @@ import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.chrono.ChronoPeriod;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Arrays;
 import java.util.List;
@@ -524,7 +525,49 @@ public class PersianDateTest {
         PersianDate expected = PersianDate.of(1365, 1, 1);
         assertEquals(expected, PersianDate.fromGregorian(ldt));
     }
+    //-----------------------------------------------------------------------
+    @Test
+    public void testParse() {
+        assertEquals(PersianDate.of(1399, 2, 31), PersianDate.parse("1399-02-31"));
+        assertEquals(PersianDate.of(1399, 1, 1), PersianDate.parse("1399-01-01"));
+        assertEquals(PersianDate.of(1399, 12, 30), PersianDate.parse("1399-12-30"));
+        assertEquals(PersianDate.of(1399, 12, 29), PersianDate.parse("1399-12-29"));
+        assertEquals(PersianDate.of(1399, 6, 31), PersianDate.parse("1399-06-31"));
+        assertEquals(PersianDate.of(1399, 10, 30), PersianDate.parse("1399-10-30"));
+        assertEquals(PersianDate.of(1400, 1, 1), PersianDate.parse("1400-01-01"));
+        assertEquals(PersianDate.of(1400, 2, 28), PersianDate.parse("1400-02-28"));
+        assertEquals(PersianDate.of(1400, 2, 29), PersianDate.parse("1400-02-29"));
+        assertEquals(PersianDate.of(1400, 2, 30), PersianDate.parse("1400-02-30"));
+        assertEquals(PersianDate.of(1400, 2, 31), PersianDate.parse("1400-02-31"));
+        assertEquals(PersianDate.of(1400, 6, 30), PersianDate.parse("1400-06-30"));
+        assertEquals(PersianDate.of(1400, 6, 31), PersianDate.parse("1400-06-31"));
+        assertEquals(PersianDate.of(1400, 10, 1), PersianDate.parse("1400-10-01"));
+        assertEquals(PersianDate.of(1400, 10, 30), PersianDate.parse("1400-10-30"));
+        assertEquals(PersianDate.of(1400, 12, 29), PersianDate.parse("1400-12-29"));
+        assertEquals(PersianDate.of(1403, 1, 1), PersianDate.parse("1403-01-01"));
+        assertEquals(PersianDate.of(1403, 2, 28), PersianDate.parse("1403-02-28"));
+        assertEquals(PersianDate.of(1403, 2, 29), PersianDate.parse("1403-02-29"));
+        assertEquals(PersianDate.of(1403, 2, 30), PersianDate.parse("1403-02-30"));
+        assertEquals(PersianDate.of(1403, 2, 31), PersianDate.parse("1403-02-31"));
+        assertEquals(PersianDate.of(1403, 6, 30), PersianDate.parse("1403-06-30"));
+        assertEquals(PersianDate.of(1403, 6, 31), PersianDate.parse("1403-06-31"));
+        assertEquals(PersianDate.of(1403, 10, 1), PersianDate.parse("1403-10-01"));
+        assertEquals(PersianDate.of(1403, 10, 30), PersianDate.parse("1403-10-30"));
+        assertEquals(PersianDate.of(1403, 12, 29), PersianDate.parse("1403-12-29"));
+        assertEquals(PersianDate.of(1403, 12, 30), PersianDate.parse("1403-12-30"));
+    }
 
+    @Test
+    public void testParse2() {
+        assertEquals(PersianDate.of(1399, 2, 31), PersianDate.parse("1399/02/31",
+                DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        assertEquals(PersianDate.of(1399, 1, 1), PersianDate.parse("1399 01 01",
+                DateTimeFormatter.ofPattern("yyyy MM dd")));
+        assertEquals(PersianDate.of(1399, 12, 30), PersianDate.parse("12 1399 30",
+                DateTimeFormatter.ofPattern("MM yyyy dd")));
+        assertEquals(PersianDate.of(1399, 12, 29), PersianDate.parse("29 12 1399",
+                DateTimeFormatter.ofPattern("dd MM yyyy")));
+    }
     //-----------------------------------------------------------------------
     @Test
     public void testOnIsEqual() {
