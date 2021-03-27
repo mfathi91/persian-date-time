@@ -35,7 +35,7 @@ PersianDate persianDate2 = PersianDate.of(1396, PersianMonth.MEHR, 15);
 ```
 To parse Persian date from a string:
 ```java
-PersianDate persianDate1 = PersianDate.parse("1400-06-15");    // From standard format
+PersianDate persianDate1 = PersianDate.parse("1400-06-15");    // From the standard format
 PersianDate persianDate1 = PersianDate.parse("1400/06/15", DateTimeFormatter.ofPattern("yyyy/MM/dd"));    // From a desired format
 ```
 To convert Persian date to Gregorian date:
