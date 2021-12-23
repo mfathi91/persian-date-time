@@ -2,7 +2,6 @@
 ----------------------------------------------------
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mfathi91/persian-date-time/badge.svg)](http://search.maven.org/#search|ga|1|com.github.mfathi91)
 [![codecov](https://codecov.io/gh/mfathi91/persian-date-time/branch/master/graph/badge.svg)](https://codecov.io/gh/mfathi91/persian-date-time)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/47c6af41e1fe49c3adad26a5629314cd)](https://www.codacy.com/app/mfathi91/persian-date-time?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mfathi91/persian-date-time&amp;utm_campaign=Badge_Grade)
 [![Javadocs](http://javadoc.io/badge/com.github.mfathi91/persian-date-time.svg?color=brightgreen)](http://javadoc.io/doc/com.github.mfathi91/persian-date-time)
 
 
@@ -24,48 +23,44 @@ Include the following to your dependency list:
 ```
 
 ### Usage
-To get the current Persian date:
+`PersianDate`: The base class for Persian date handling. Here are some trivial examples on how to use different 
+functionalities of `PersianDate`
 ```java
+// Instantiate 
 PersianDate today = PersianDate.now();
-```
-To get a desired Persian date:
-```java
 PersianDate persianDate1 = PersianDate.of(1396, 7, 15);
 PersianDate persianDate2 = PersianDate.of(1396, PersianMonth.MEHR, 15);
-```
-To parse Persian date from a string:
-```java
-PersianDate persianDate1 = PersianDate.parse("1400-06-15");    // From the standard format
-PersianDate persianDate1 = PersianDate.parse("1400/06/15", DateTimeFormatter.ofPattern("yyyy/MM/dd"));    // From a desired format
-```
-To convert Persian date to Gregorian date:
-```java
-PersianDate persianDate = PersianDate.of(1397, 5, 11);
-LocalDate gregDate1 = persianDate.toGregorian();    // => '2018-08-02'
-```
-To convert from Gregorian date to Persian date:
-```java
-LocalDate gregDate = LocalDate.of(2015, 4, 17);
-PersianDate persianDate = PersianDate.fromGregorian(gregDate);  //  => '1394/01/28'
-```
-Conversion between Persian date and any other JDK supported calendar, such as _HijrahDate_:
-```java
-// Convert to Persian date
-PersianDate persianDate = PersianDate.from(hijrahDate);
-// Convert from Persian date
-HijrahDate hijrahDate = HijrahDate.from(persianDate);
-```
-To format a Persian date based on a _DateTimeFormatter_ class:
-```java
+
+// Convert
+PersianDate persianDate5 = PersianDate.of(1397, 5, 11);
+LocalDate gregDate = persianDate.toGregorian();    // => '2018-08-02'
+PersianDate persianDate6 = PersianDate.fromGregorian(gregDate);  //  => '1397/05/11'
+
+// Parse
+PersianDate persianDate3 = PersianDate.parse("1400-06-15");    // From the standard format
+PersianDate persianDate4 = PersianDate.parse("1400/06/15", DateTimeFormatter.ofPattern("yyyy/MM/dd"));    // From a desired format
+
+// Format
 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 dtf.format(PersianDate.now());    // => e.g. '1396/05/10'
-// another possible approach to format
-PersianDate.now().format(dtf);    // => e.g. '1396/05/10'
+```
+`PersianDateTime`: A wrapper class around `PersianDate` and `LocalTime` to make the date-time handling more 
+convenient. Here are some trivial example of `PersianDateTime`
+```java
+// Instantiate
+PersianDateTime now = PersianDateTime.now();    // => 'now' will contain the instantiated date and time
+PersianDateTime persianDateTime2 = PersianDateTime.of(PersianDate.of(1400, PersianMonth.DEY, 15), LocalTime.of(17, 55, 19));
+PersianDateTime persianDateTime3 = PersianDateTime.of(1400, PersianMonth.DEY, 15, 17, 55, 19);
+
+// Parse
+PersianDateTime persianDateTime4 = PersianDate.parse("1401-06-10T08:35:11");    // From the standard format
+PersianDateTime persianDateTime5 = PersianDate.parse("1400-06-15_11-38-43", DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));    // From a desired format
+
+// Format
+DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+dtf.format(PersianDateTime.now());    // => e.g. '1396/05/10 14:05:11'
 ```
 The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](https://github.com/soroush/libcalendars).
-
-
-
 ### Requirements
 This version of Persian Date Time requires:
  * Java SE 8
