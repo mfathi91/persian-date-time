@@ -45,59 +45,55 @@
     </distributionManagement>
 
     <properties>
+        <!-- Environment -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jcip-version>1.0</jcip-version>
-        <junit-version>4.12</junit-version>
-        <unitils-core-version>3.4.6</unitils-core-version>
-        <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
-        <maven-javadoc-plugin-version>3.0.0-M1</maven-javadoc-plugin-version>
-        <maven-gpg-plugin-version>1.6</maven-gpg-plugin-version>
-        <nexus-staging-plugin-version>1.6.7</nexus-staging-plugin-version>
-        <cobertura-maven-plugin-version>2.7</cobertura-maven-plugin-version>
+        <jdk.version>1.8</jdk.version>
+
+        <!-- Maven plugins -->
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
+
+        <!-- Nexus -->
+        <nexus-staging-plugin.version>1.6.8</nexus-staging-plugin.version>
+
+        <!-- External dependencies -->
+        <jcip.version>1.0</jcip.version>
+        <junit.version>4.13.2</junit.version>
     </properties>
 
     <dependencies>
-        <!-- JCIP  -->
         <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
-            <version>${jcip-version}</version>
+            <version>${jcip.version}</version>
         </dependency>
 
-        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Unitils -->
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils-core</artifactId>
-            <version>${unitils-core-version}</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Compiler plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
 
-            <!-- Source plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin-version}</version>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -108,11 +104,10 @@
                 </executions>
             </plugin>
 
-            <!-- Javadoc plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin-version}</version>
+                <version>${maven-javadoc-plugin.version}</version>
                 <configuration>
                     <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
@@ -126,11 +121,10 @@
                 </executions>
             </plugin>
 
-            <!-- Nexus staging plugin -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-plugin-version}</version>
+                <version>${nexus-staging-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -139,11 +133,10 @@
                 </configuration>
             </plugin>
 
-            <!-- Cobertura (code coverage) plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura-maven-plugin-version}</version>
+                <version>${cobertura-maven-plugin.version}</version>
                 <configuration>
                     <formats>
                         <format>html</format>
@@ -157,7 +150,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven-gpg-plugin-version}</version>
+                <version>${maven-gpg-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>

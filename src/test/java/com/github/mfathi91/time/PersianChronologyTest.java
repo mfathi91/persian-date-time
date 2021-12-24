@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 import static java.time.temporal.ChronoField.*;
 import static org.junit.Assert.*;
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 public class PersianChronologyTest {
 
@@ -40,24 +39,24 @@ public class PersianChronologyTest {
 
     @Test
     public void testOnDateYearMonthDay() {
-        PersianDate expected = PersianDate.of(1000, 4, 25);
-        PersianDate actual = PersianChronology.INSTANCE.date(1000, 4, 25);
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1000, 4, 25);
+        final PersianDate actual = PersianChronology.INSTANCE.date(1000, 4, 25);
+        assertEquals(expected, actual);
     }
     //-----------------------------------------------------
 
     @Test
     public void testOnDateYearDay1() {
-        PersianDate expected = PersianDate.of(1387, 12, 30);
-        PersianDate actual = PersianChronology.INSTANCE.dateYearDay(1387, 366);
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1387, 12, 30);
+        final PersianDate actual = PersianChronology.INSTANCE.dateYearDay(1387, 366);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnDateYearDay2() {
-        PersianDate expected = PersianDate.of(1000, 1, 1);
-        PersianDate actual = PersianChronology.INSTANCE.dateYearDay(1000, 1);
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1000, 1, 1);
+        final PersianDate actual = PersianChronology.INSTANCE.dateYearDay(1000, 1);
+        assertEquals(expected, actual);
     }
 
     @Test(expected = DateTimeException.class)
@@ -68,31 +67,31 @@ public class PersianChronologyTest {
 
     @Test
     public void testOnDateEpochDay1() {
-        PersianDate expected = PersianDate.of(1396, 8, 25);
-        PersianDate actual = PersianChronology.INSTANCE.dateEpochDay(17486);
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1396, 8, 25);
+        final PersianDate actual = PersianChronology.INSTANCE.dateEpochDay(17486);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnDateEpochDay2() {
-        PersianDate expected = PersianDate.of(378, 12, 8);
-        PersianDate actual = PersianChronology.INSTANCE.dateEpochDay(-354228);
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(378, 12, 8);
+        final PersianDate actual = PersianChronology.INSTANCE.dateEpochDay(-354228);
+        assertEquals(expected, actual);
     }
     //-----------------------------------------------------
 
     @Test
     public void testOnDateTemporalAccessor1() {
-        PersianDate expected = PersianDate.of(1396, 8, 25);
-        PersianDate actual = PersianChronology.INSTANCE.date(PersianDate.of(1396, 8, 25));
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1396, 8, 25);
+        final PersianDate actual = PersianChronology.INSTANCE.date(PersianDate.of(1396, 8, 25));
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnDateTemporalAccessor2() {
-        PersianDate expected = PersianDate.of(1396, 8, 25);
-        PersianDate actual = PersianChronology.INSTANCE.date(LocalDate.of(2017, 11, 16));
-        assertReflectionEquals(expected, actual);
+        final PersianDate expected = PersianDate.of(1396, 8, 25);
+        final PersianDate actual = PersianChronology.INSTANCE.date(LocalDate.of(2017, 11, 16));
+        assertEquals(expected, actual);
     }
     //-----------------------------------------------------
 
@@ -131,42 +130,42 @@ public class PersianChronologyTest {
 
     @Test
     public void testOnEras() {
-        assertReflectionEquals(Arrays.asList(PersianEra.AHS), PersianChronology.INSTANCE.eras());
+        assertEquals(Arrays.asList(PersianEra.AHS), PersianChronology.INSTANCE.eras());
     }
     //-----------------------------------------------------
 
     @Test
     public void testOnRangeDayOfMonth() {
-        ValueRange expected = ValueRange.of(1, 29, 31);
-        ValueRange actual = PersianChronology.INSTANCE.range(DAY_OF_MONTH);
-        assertReflectionEquals(expected, actual);
+        final ValueRange expected = ValueRange.of(1, 29, 31);
+        final ValueRange actual = PersianChronology.INSTANCE.range(DAY_OF_MONTH);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnRangeDayOfYear() {
-        ValueRange expected = ValueRange.of(1, 365, 366);
-        ValueRange actual = PersianChronology.INSTANCE.range(DAY_OF_YEAR);
-        assertReflectionEquals(expected, actual);
+        final ValueRange expected = ValueRange.of(1, 365, 366);
+        final ValueRange actual = PersianChronology.INSTANCE.range(DAY_OF_YEAR);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnRangeAlignedWeekOfMonth() {
-        ValueRange expected = ValueRange.of(1, 5);
-        ValueRange actual = PersianChronology.INSTANCE.range(ALIGNED_WEEK_OF_MONTH);
-        assertReflectionEquals(expected, actual);
+        final ValueRange expected = ValueRange.of(1, 5);
+        final ValueRange actual = PersianChronology.INSTANCE.range(ALIGNED_WEEK_OF_MONTH);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testOnRangeYear() {
-        ValueRange expected = ValueRange.of(1, 1999);
-        ValueRange actual = PersianChronology.INSTANCE.range(YEAR);
-        assertReflectionEquals(expected, actual);
+        final ValueRange expected = ValueRange.of(1, 1999);
+        final ValueRange actual = PersianChronology.INSTANCE.range(YEAR);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testOnRangeEra(){
-        ValueRange expected = ValueRange.of(1, 1);
-        ValueRange actual = PersianChronology.INSTANCE.range(ERA);
-        assertReflectionEquals(expected, actual);
+    public void testOnRangeEra() {
+        final ValueRange expected = ValueRange.of(1, 1);
+        final ValueRange actual = PersianChronology.INSTANCE.range(ERA);
+        assertEquals(expected, actual);
     }
 }

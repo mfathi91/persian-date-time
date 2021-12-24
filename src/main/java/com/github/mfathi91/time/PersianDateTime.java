@@ -215,6 +215,7 @@ public final class PersianDateTime implements ChronoLocalDateTime<PersianDate> {
      * Parses the given string with the given formatter into its corresponding Persian date-time.
      *
      * @param text the input string with the given formatter pattern, not {@code null}
+     * @param formatter the formatter to parse the string from, not {@code  null}
      * @return the corresponding Persian date-time of the given string
      * @throws DateTimeException if the format of the given string is unexpected
      * @see DateTimeFormatter
