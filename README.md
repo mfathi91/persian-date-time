@@ -53,8 +53,8 @@ PersianDateTime persianDateTime2 = PersianDateTime.of(PersianDate.of(1400, Persi
 PersianDateTime persianDateTime3 = PersianDateTime.of(1400, PersianMonth.DEY, 15, 17, 55, 19);
 
 // Parse
-PersianDateTime persianDateTime4 = PersianDate.parse("1401-06-10T08:35:11");    // From the standard format
-PersianDateTime persianDateTime5 = PersianDate.parse("1400-06-15_11-38-43", DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));    // From a desired format
+PersianDateTime persianDateTime4 = PersianDateTime.parse("1401-06-10T08:35:11");    // From the standard format
+PersianDateTime persianDateTime5 = PersianDateTime.parse("1400-06-15_11-38-43", DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));    // From a desired format
 
 // Format
 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
