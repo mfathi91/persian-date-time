@@ -45,7 +45,7 @@ DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 dtf.format(PersianDate.now());    // => e.g. '1396/05/10'
 ```
 `PersianDateTime`: A wrapper class around `PersianDate` and `LocalTime` to make the date-time handling more 
-convenient. Here are some trivial example of `PersianDateTime`
+convenient. Here are some trivial examples of `PersianDateTime`
 ```java
 // Instantiate
 PersianDateTime now = PersianDateTime.now();    // => 'now' will contain the instantiated date and time
