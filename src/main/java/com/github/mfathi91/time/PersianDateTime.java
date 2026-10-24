@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.Immutable;
-
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,7 +18,6 @@ import java.util.Objects;
  *
  * @author Mahmoud Fathi
  */
-@Immutable
 public final class PersianDateTime implements ChronoLocalDateTime<PersianDate> {
 
     /**

@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.Immutable;
-
 /**
  * A month-of-year, such as Mehr.
  * <p>
@@ -21,7 +19,6 @@ import net.jcip.annotations.Immutable;
  *
  * @author Mahmoud Fathi
  */
-@Immutable
 public enum PersianMonth {
 
     /**

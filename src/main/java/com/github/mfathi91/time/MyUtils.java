@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.ThreadSafe;
-
 /**
  * This class provides static helper methods, in order to remove boilerplate code.
  * It is not possible to get an instance of this class.
@@ -10,7 +8,6 @@ import net.jcip.annotations.ThreadSafe;
  *
  * @author Mahmoud Fathi
  */
-@ThreadSafe
 public class MyUtils {
 
     // Ensure non-instantiability

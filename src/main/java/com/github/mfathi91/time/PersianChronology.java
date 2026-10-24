@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.Immutable;
-
 import java.time.DateTimeException;
 import java.time.chrono.AbstractChronology;
 import java.time.chrono.ChronoLocalDate;
@@ -26,7 +24,6 @@ import static java.time.temporal.ChronoField.YEAR;
  *
  * @author Mahmoud Fathi
  */
-@Immutable
 public final class PersianChronology extends AbstractChronology {
     /**
      * Single instance of this class.

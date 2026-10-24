@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.Immutable;
-
 import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoPeriod;
@@ -29,8 +27,15 @@ import static java.time.temporal.ChronoField.*;
  *
  * @author Mahmoud Fathi
  */
-@Immutable
 public final class PersianDate implements ChronoLocalDate {
+
+    /**
+     * Persian years in which the 33-year leap cycle is broken.
+     *
+     * @see <a href="https://www.astro.uni.torun.pl/~kb/Papers/EMP/PersianC-EMP.htm">Kazimierz M. Borkowski</a>
+     */
+    private static final int[] LEAP_CYCLE_BREAKS = {-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181,
+            1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178};
 
     /**
      * The minimum supported persian date {@code 0001-01-01}.
@@ -48,31 +53,6 @@ public final class PersianDate implements ChronoLocalDate {
      * 1970-01-01 to julian day.
      */
     private static final long JULIAN_DAY_TO_1970 = 2440588L;
-
-    /**
-     * Constant for cycle of of days.
-     */
-    private static final long CYCLE_DAYS = 1029983;
-
-    /**
-     * Constant for cycle of years.
-     */
-    private static final int CYCLE_YEARS = 2820;
-
-    /**
-     * Constant for length of year.
-     */
-    private static final double YEAR_LENGTH = 365.24219858156028368;
-
-    /**
-     * Constant for Persian epoch date.
-     */
-    private static final long PERSIAN_DATE_EPOCH = 2121446;
-
-    /**
-     * Constant for leap year threshold.
-     */
-    private static final double LEAP_THRESHOLD = 0.24219858156028368;
 
     /**
      * The year.
@@ -243,35 +223,57 @@ public final class PersianDate implements ChronoLocalDate {
      *
      * @param julianDays julian days
      * @return an instance of {@link PersianDate}
-     * @see <a href="https://github.com/soroush/libcalendars">libcalendars</a>
      */
     public static PersianDate ofJulianDays(long julianDays) {
-        final long offset = julianDays - PERSIAN_DATE_EPOCH;
-        long cycle_no = offset / CYCLE_DAYS;
-        if (offset < 0) {
-            --cycle_no;
-        }
-        final long cycleStart = PERSIAN_DATE_EPOCH + cycle_no * CYCLE_DAYS;
-        final int yc = (int) (Math.floor((julianDays - cycleStart) / YEAR_LENGTH));
-        long year = yc + 475 + cycle_no * 2820;
-        final long lll = PERSIAN_DATE_EPOCH + cycle_no * CYCLE_DAYS + (long) Math.floor((yc * YEAR_LENGTH));
-        long day = julianDays - lll + 1;
-        if (day > (isLeapYear((int) year) ? 366 : 365)) {
-            year++;
-            day = 1;
-        }
-        if (year <= 0) {
+        final long epochDay = julianDays - JULIAN_DAY_TO_1970;
+        int year = LocalDate.ofEpochDay(epochDay).getYear() - 621;
+        long nowruz = nowruzEpochDay(year);
+        if (epochDay < nowruz) {
             year--;
+            nowruz = nowruzEpochDay(year);
         }
+        PersianChronology.INSTANCE.checkValidValue(year, YEAR);
+        final boolean leapYear = isLeapYear(year);
+        int day = (int) (epochDay - nowruz) + 1;
         int month;
         for (month = 1; month < 12; ++month) {
-            if (day > PersianMonth.of(month).length(isLeapYear((int) year))){
-                day -= PersianMonth.of(month).length(isLeapYear((int) year));
+            if (day > PersianMonth.of(month).length(leapYear)) {
+                day -= PersianMonth.of(month).length(leapYear);
             } else {
                 break;
             }
         }
-        return PersianDate.of((int) year, month, (int) day);
+        return PersianDate.of(year, month, day);
+    }
+
+    /**
+     * Returns the epoch day of the first day (Nowruz) of the given Persian year, based on
+     * Borkowski's algorithm, which matches the official Iranian calendar for years -61 to 3177.
+     *
+     * @param year the Persian year
+     * @return the epoch day of Farvardin 1st of {@code year}
+     * @see <a href="https://www.astro.uni.torun.pl/~kb/Papers/EMP/PersianC-EMP.htm">Kazimierz M. Borkowski</a>
+     */
+    private static long nowruzEpochDay(int year) {
+        int leapJ = -14;
+        int jp = LEAP_CYCLE_BREAKS[0];
+        int jump = 0;
+        for (int i = 1; i < LEAP_CYCLE_BREAKS.length; i++) {
+            jump = LEAP_CYCLE_BREAKS[i] - jp;
+            if (year < LEAP_CYCLE_BREAKS[i]) {
+                break;
+            }
+            leapJ += (jump / 33) * 8 + (jump % 33) / 4;
+            jp = LEAP_CYCLE_BREAKS[i];
+        }
+        final int n = year - jp;
+        leapJ += (n / 33) * 8 + ((n % 33) + 3) / 4;
+        if (jump % 33 == 4 && jump - n == 4) {
+            leapJ++;
+        }
+        final int gregorianYear = year + 621;
+        final int leapG = gregorianYear / 4 - ((gregorianYear / 100 + 1) * 3) / 4 - 150;
+        return LocalDate.of(gregorianYear, Month.MARCH, 20 + leapJ - leapG).toEpochDay();
     }
 
     /**
@@ -616,7 +618,7 @@ public final class PersianDate implements ChronoLocalDate {
      */
     public static boolean isLeapYear(final int year) {
         MyUtils.intRequirePositive(year, "year");
-        return ((year + 2346) * LEAP_THRESHOLD % 1) < LEAP_THRESHOLD;
+        return nowruzEpochDay(year + 1) - nowruzEpochDay(year) == 366;
     }
 
     /**
@@ -658,7 +660,6 @@ public final class PersianDate implements ChronoLocalDate {
      * Calling this method has no effect on this instance.
      *
      * @return number of corresponding julian days
-     * @see <a href="http://www.fourmilab.ch/documents/calendar/">calendar convertor</a>
      */
     public long toJulianDay() {
         return toJulianDay(year, month, day);
@@ -671,17 +672,9 @@ public final class PersianDate implements ChronoLocalDate {
      * julian day.
      *
      * @return number of corresponding julian days
-     * @see <a href="http://www.fourmilab.ch/documents/calendar/">calendar convertor</a>
      */
     static long toJulianDay(int year, int month, int dayOfMonth) {
-
-        long era = (year - 475) / CYCLE_YEARS;
-        if ((year - 475) < 0) {
-            era--;
-        }
-        final long y_c = (year - 475) - era * CYCLE_YEARS;
-        final long f_d = PERSIAN_DATE_EPOCH + era * CYCLE_DAYS + (long) Math.floor((y_c * YEAR_LENGTH));
-        return f_d + PersianMonth.of(month).daysToFirstOfMonth() + dayOfMonth - 1;
+        return nowruzEpochDay(year) + JULIAN_DAY_TO_1970 + PersianMonth.of(month).daysToFirstOfMonth() + dayOfMonth - 1;
     }
     //-----------------------------------------------------------------------
 
