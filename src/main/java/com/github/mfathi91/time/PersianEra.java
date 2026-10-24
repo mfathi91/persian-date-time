@@ -1,7 +1,5 @@
 package com.github.mfathi91.time;
 
-import net.jcip.annotations.Immutable;
-
 import java.time.DateTimeException;
 import java.time.chrono.Era;
 import java.time.temporal.ChronoField;
@@ -25,7 +23,6 @@ import static java.time.temporal.ChronoField.ERA;
  *
  * @author Mahmoud Fathi
  */
-@Immutable
 public enum PersianEra implements Era {
 
     /**

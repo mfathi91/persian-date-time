@@ -1,8 +1,8 @@
 ![Persian Date Time](https://user-images.githubusercontent.com/29010410/41397561-dc9a470a-6fc9-11e8-923a-112393900b0c.JPG)
 ----------------------------------------------------
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mfathi91/persian-date-time/badge.svg)](http://search.maven.org/#search|ga|1|com.github.mfathi91)
-[![codecov](https://codecov.io/gh/mfathi91/persian-date-time/branch/master/graph/badge.svg)](https://codecov.io/gh/mfathi91/persian-date-time)
-[![Javadocs](http://javadoc.io/badge/com.github.mfathi91/persian-date-time.svg?color=brightgreen)](http://javadoc.io/doc/com.github.mfathi91/persian-date-time)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.mfathi91/persian-date-time)](https://central.sonatype.com/artifact/com.github.mfathi91/persian-date-time)
+[![CI](https://github.com/mfathi91/persian-date-time/actions/workflows/ci.yml/badge.svg)](https://github.com/mfathi91/persian-date-time/actions/workflows/ci.yml)
+[![Javadocs](https://javadoc.io/badge/com.github.mfathi91/persian-date-time.svg?color=brightgreen)](https://javadoc.io/doc/com.github.mfathi91/persian-date-time)
 
 
 
@@ -18,7 +18,7 @@ Include the following to your dependency list:
 <dependency>
   <groupId>com.github.mfathi91</groupId>
   <artifactId>persian-date-time</artifactId>
-  <version>4.2.1</version>
+  <version>4.3.0</version>
 </dependency>
 ```
 
@@ -33,7 +33,7 @@ PersianDate persianDate2 = PersianDate.of(1396, PersianMonth.MEHR, 15);
 
 // Convert
 PersianDate persianDate5 = PersianDate.of(1397, 5, 11);
-LocalDate gregDate = persianDate.toGregorian();    // => '2018-08-02'
+LocalDate gregDate = persianDate5.toGregorian();    // => '2018-08-02'
 PersianDate persianDate6 = PersianDate.fromGregorian(gregDate);  //  => '1397/05/11'
 
 // Parse
@@ -60,10 +60,13 @@ PersianDateTime persianDateTime5 = PersianDateTime.parse("1400-06-15_11-38-43", 
 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 dtf.format(PersianDateTime.now());    // => e.g. '1396/05/10 14:05:11'
 ```
-The conversion algorithm from Solar Hijri calendar to Gregorian calendar and vice versa, is adopted from [here](https://github.com/soroush/libcalendars).
+Leap years and the conversion between Solar Hijri calendar and Gregorian calendar follow
+[Borkowski's algorithm](https://www.astro.uni.torun.pl/~kb/Papers/EMP/PersianC-EMP.htm), which matches the official
+Iranian calendar. Supported years are 1 to 1999.
+
 ### Requirements
 This version of Persian Date Time requires:
- * Java SE 8
+ * Java 8 or later
 
 ## License
 This library is released under MIT license.

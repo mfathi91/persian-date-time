@@ -122,14 +122,14 @@ public class PersianDateTest {
 
     @Test
     public void testOnPlusYearsLeapYear100Years() {
-        PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(100);
-        PersianDate expected = PersianDate.of(1603, 12, 29);
+        PersianDate actual = PersianDate.of(1502, 12, 30).plusYears(100);
+        PersianDate expected = PersianDate.of(1602, 12, 29);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testOnPlusYearsNegativeLeapYear104Years() {
-        PersianDate actual = PersianDate.of(1503, 12, 30).plusYears(-104);
+    public void testOnPlusYearsNegativeLeapYear103Years() {
+        PersianDate actual = PersianDate.of(1502, 12, 30).plusYears(-103);
         PersianDate expected = PersianDate.of(1399, 12, 30);
         assertEquals(expected, actual);
     }
@@ -263,12 +263,12 @@ public class PersianDateTest {
     public void testOnIsLeapYear() {
         // Test on leap years
         List<Integer> leapYears = Arrays.asList(1375, 1379, 1383, 1387, 1391, 1395, 1399, 1403,
-                1408, 1412, 1416, 1420, 1424, 1428, 1432, 1437);
+                1408, 1412, 1416, 1420, 1424, 1428, 1432, 1436, 1441);
         for (final int leapYear : leapYears) {
             assertTrue(PersianDate.isLeapYear(leapYear));
         }
         // Test on non-leap years
-        List<Integer> nonLeapYears = IntStream.range(1375, 1437).boxed().collect(Collectors.toList());
+        List<Integer> nonLeapYears = IntStream.range(1375, 1442).boxed().collect(Collectors.toList());
         nonLeapYears.removeAll(leapYears);
         for (final int nonLeapYear : nonLeapYears) {
             assertFalse(PersianDate.isLeapYear(nonLeapYear));
@@ -489,6 +489,22 @@ public class PersianDateTest {
         assertEquals(PersianDate.of(1409, 12, 10), PersianDate.fromGregorian(LocalDate.of(2031, 3, 1)));
         assertEquals(PersianDate.of(1409, 12, 29), PersianDate.fromGregorian(LocalDate.of(2031, 3, 20)));
         assertEquals(PersianDate.of(1410, 1, 1), PersianDate.fromGregorian(LocalDate.of(2031, 3, 21)));
+    }
+
+    @Test
+    public void testOnToPersianAroundNowruz1438() {
+        // https://github.com/mfathi91/persian-date-time/issues/8
+        assertEquals(PersianDate.of(1437, 12, 29), PersianDate.fromGregorian(LocalDate.of(2059, 3, 20)));
+        assertEquals(PersianDate.of(1438, 1, 1), PersianDate.fromGregorian(LocalDate.of(2059, 3, 21)));
+        assertEquals(PersianDate.of(1438, 1, 2), PersianDate.fromGregorian(LocalDate.of(2059, 3, 22)));
+        assertEquals(LocalDate.of(2059, 3, 21), PersianDate.of(1438, 1, 1).toGregorian());
+    }
+
+    @Test
+    public void testOnGregorianRoundTrip() {
+        for (LocalDate ld = PersianDate.MIN.toGregorian(); !ld.isAfter(PersianDate.MAX.toGregorian()); ld = ld.plusDays(1)) {
+            assertEquals(ld, PersianDate.fromGregorian(ld).toGregorian());
+        }
     }
 
     @Test
